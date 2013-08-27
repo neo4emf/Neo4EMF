@@ -1,0 +1,33 @@
+﻿# This is a combination of 4 commits.
+# The first commit's message is:
+adding CNAME
+
+# This is the 2nd commit message:
+
+cname
+
+# This is the 3rd commit message:
+
+cname2
+
+# This is the 4th commit message:
+
+cname3
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# HEAD detached from 017f673
+# You are currently editing a commit while rebasing branch 'gh-pages' on '167a33d'.
+#
+# Changes to be committed:
+#   (use "git reset HEAD^1 <file>..." to unstage)
+#
+#	new file:   CNAME
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	1uesgl4r.zwb.txt
+#	fr.inria.atlanmod.neo4emf.codegen/
+#	fr.inria.atlanmod.neo4emf.libs/
+

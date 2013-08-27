@@ -6,7 +6,10 @@ body {
   color:#777;
   font-weight:300;
 }
-
+code1 {
+color : black;
+background-color= red;
+}
 h1, h2, h3, h4, h5, h6 {
   color:#222;
   margin:0 0 20px;
@@ -61,6 +64,7 @@ code, pre {
   font-family:Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
   color:#333;
   font-size:12px;
+  background-color: #faebd7;
 }
 
 pre {
@@ -96,7 +100,7 @@ img {
 }
 
 header {
-  width:270px;
+  width:300px;
   float:left;
   position:fixed;
 }
@@ -160,7 +164,7 @@ header ul a strong {
 }
 
 section {
-  width:500px;
+  width:650px;
   float:right;
   padding-bottom:50px;
 }
@@ -181,13 +185,13 @@ footer {
   float:left;
   position:fixed;
   bottom:50px;
+  margin-left : -100px;
 }
 
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
     width:auto;
-    margin:0;
   }
   
   header, section, footer {
@@ -197,14 +201,13 @@ footer {
   }
   
   header {
-    padding-right:320px;
+    padding-right: 200px;
   }
   
   section {
     border:1px solid #e5e5e5;
     border-width:1px 0;
     padding:20px 0;
-    margin:0 0 20px;
   }
   
   header a small {
@@ -225,6 +228,7 @@ footer {
   
   header {
     padding:0;
+	margin-left : 100px;
   }
   
   header ul, header p.view {
