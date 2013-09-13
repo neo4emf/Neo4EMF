@@ -4,7 +4,7 @@
 
   
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1"><title>NEO4EMF by amine-ben</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1"><title>NEO4EMF : Atlanmod research team</title>
     
 
     <link rel="stylesheet" href="stylesheets/styles.css">
@@ -14,15 +14,10 @@
     <![endif]--></head><body>
 <div class="wrapper">
       <header style = "margin-left : -100px;">
-	  <h1>NEO4EMF</h1>
-        <p>EMF, NEO4J, Model repository</p>
-
-        <p class="view"><a href="https://github.com/amine-ben/Neo4EMF">View the Project on GitHub <small>amine-ben/Neo4EMF</small></a></p>
-
-
-        <ul><li><a href="https://github.com/amine-ben/Neo4EMF/zipball/master">Download <strong>ZIP File</strong></a></li><li><a href="https://github.com/amine-ben/Neo4EMF/tarball/master">Download <strong>TAR Ball</strong></a></li><li><a href="https://github.com/amine-ben/Neo4EMF">View On <strong>GitHub</strong></a></li></ul>
+	  <a href = ./index.html> <img style="width: 250px;" src="./images/logo.png" alt="Neo4EMF" align="middle" hspace = "40" > </a>
+	  <h2 align = "middle"> Big models made possible</h2>
         </header>
-      <section>
+<section>
 	  <h2>
 
 <a name="presentation" class="anchor" href="#presentation"><span class="octicon octicon-link"></span></a>Presentation</h2>
@@ -30,9 +25,9 @@
 <p>One of the main limitations hampering the adoption of modeling
 technologies for large-scale systems is the lack of solutions to
 efficiently handle big, complex and highly interconnected data models.
-This project introduces NEO4EMF, a Neo4j-based model repository and
+This project introduces <b>NEO4EMF, a Neo4j-based model repository and
 persistence framework allowing on-demand loading, storage, and
-unloading of large-scale EMF models. Neo4EMF uses a sophisticated
+unloading of large-scale EMF models</b>. Neo4EMF uses a sophisticated
 unloading approach apart from simple Soft/Weak references. Moreover,
 Neo4EMF provides a No-SQL database persistence framework based on
 Neo4j, which is a transactional property-graph database that proved a
@@ -45,26 +40,21 @@ models to fit into small memory. This is established through an
 on-demand loading mechanism that is analogous to CDO but with a few
 differences:</p>
 
-<ol><li>Lightweight first time loading of model elements: we separated
+<ol><li><b>Lightweight first time loading of model elements:</b> we separated
 EMF objects and their data fields, thus, data objects are only
-instantiated if an access request to one of their fields is established</li><li>Static
-and dynamic partitioning of model elements: a partition represents a
+instantiated if an access request to one of their fields is established</li><li><b>Static
+and dynamic partitioning of model elements</b>: a partition represents a
 group of model elements to be unloaded all together. Hence, after each
 EMF operation call, first time loading objects are organized in their
-suitable partition according to the partitioning strategy.</li><li>Unloading
-of partitions: when memory reaches a given threshold, we use a
+suitable partition according to the partitioning strategy.</li><li><b>Unloading
+of partitions</b>: when memory reaches a given threshold, we use a
 selection strategy to choose one or more partitions to be removed from
-the memory.</li></ol><p>We adapted the EMF java code generation
+the memory.</li></ol><p>We adapted the <b>EMF java code generation</b>
 templates for a refined on-demand loading mechanism, we separated data
-(attributes and references : see figure below ) of their objects for a
+( <b>attributes and references</b>) of their objects for a
 lighter first time loading. They are implemented as inner classes
 within their containers. Data objects And data fields are filled in
 when due.</p>
-
-
-
-
-<img style="width: 326px; height: 129px;" src="http://i40.tinypic.com/99oswy.jpg" alt="Respresentation of objects and their models" align="middle" hspace="120">
 
 <h2>
 <a name="wiki" class="anchor" href="#wiki"><span class="octicon octicon-link"></span></a>Wiki</h2>
@@ -86,29 +76,31 @@ when due.</p>
 <h3>
 <a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a>Neo4EMF Resource creation :</h3>
 
-<div style = "color : black; background-color : #FFEBCD;">
+<div class = "code">
 	<p>
 		// Create the resourceSet
-        ResourceSet resourceSet = new ResourceSetImpl();&nbsp;
+        <br>ResourceSet rSet = new ResourceSetImpl();&nbsp;
 	</p>
 	<p>
 		// Create an URI with neo4emf as protocol 
 		<br>URI uri = URI.createURI("neo4emf:/./MyFirstNeo4emfResource");
 	</p>
 	<p>
-		// Attach this protocol to INeo4emfResourceFactory 
-        resourceSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put("neo4emf", 
-                INeo4emfResourceFactory.eINSTANCE.setRelationshipsMap(reltypes<br>.ReltypesMappings.getInstance().getMap())); 
-		<br>
+		// Attach this protocol to INeo4emfResourceFactory
+		<br>// If the relationshipMap is not set don't forget to register the package
+		<br>// It is automatically generated
+        <br>rSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put("neo4emf", 
+                INeo4emfResourceFactory.eINSTANCE.setRelationshipsMap(reltypes<br>.ReltypesMapping.getInstance().getMap())); 
+
 	</p>
 	<p>
 		// Create the resource 
 		<br>INeo4emfResource resource = (INeo4emfResource) resourceSet.createResource(uri); 
-		<br>
+	
 	</p>
 	<p>
 		// Register the package 
-		<br> EPackage.Registry.INSTANCE.put(MgraphPackage.eINSTANCE.getNsURI(), MgraphPackage.eINSTANCE);
+		<br> EPackage.Registry.INSTANCE.put($package_nsURI$, $package_instance$);
 	</p>
 </div> 
 
@@ -116,37 +108,63 @@ when due.</p>
 <a name="neo4emf-common-option-" class="anchor" href="#neo4emf-common-option-"><span class="octicon octicon-link"></span></a>Neo4emf common option :</h3>
 
 <p>// TO COME</p>
+<h3>
+<a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a> Import from XMI files :
+</h3>
+Neo4EMF offers as well the possibility to import data from XMI into embedded neo4j DB files by using a simple method call 
+<div class = "code">
+<p> // The method takes 3 arguments : 1- xmi file path 
+<br>//2- the desired path-where to put the DB 
+<br>//3- path to ecore file   
+<br>Neo4emfResourceUtil.importFromXMI($xmi_file_path$,
+									$neo4j_db_folder_path$,$ecore_file_path$ );</p>	
+</div> 
 
 <h3>
-<a name="load-a-resource-" class="anchor" href="#load-a-resource-"><span class="octicon octicon-link"></span></a>Load a resource :</h3>
+<a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a> Neo4EMF Reflection :
+</h3>
+It is also possible to create and edit model elements with the refection API, you just need to set the package’s factory instance 
+<div class="code">
+<p> <br>// set the ePackageFactory to INeoFactory 
+<br>// package_ is an instance of EPackage       
+<br>package_.setEFactoryInstance(INeoFactory.eINSTANCE);      
+<br>EFactory neoFactory = package_.getEFactoryInstance();
+<br>// create EObject
+<br>EObject neoObject = neoFactory.create((EClass)package_.getEClassifier($class_name$));
+<br>// get & set EObject 
+<br>Object getValue = neoObject.eGet($structural_Featue$);
+<br>neoObject = neoObject.eSet($structural_feature$,$new_value$)
+</p>	
+</div> 
 
+<h3>
+<a name="load-a-resource-" class="anchor" href="#load-a-resource-"><span class="octicon octicon-link"></span></a>Resource management :</h3>
 <h4>
 <a name="load-root-objects" class="anchor" href="#load-root-objects"><span class="octicon octicon-link"></span></a>Load root objects</h4>
 
 <p>to load the root elements of a resource you simply use the load method
 
-<div style = "color : black; background-color : #FFEBCD;">resource.load(null);</div>
-
+<div class = "code">resource.load(null);</div>
 <h4>
 <a name="load-all-instances-of-some-type" class="anchor" href="#load-all-instances-of-some-type"><span class="octicon octicon-link"></span></a>Load all Instances of some type</h4>
-
-<p><code>((INeo4emfResource)resource).getAllInstances($Package_class_name$.Literals.$Eclass_name$);</code></p>
-
+to load all the instances of a given type, you just need to call the AllInstances() method from the resource.
+<div class = "code">((INeo4emfResource)resource).getAllInstances($eClass_name$);</div>
 <h3>
 <a name="save-a-resource-" class="anchor" href="#save-a-resource-"><span class="octicon octicon-link"></span></a>Save a resource :</h3>
 
 <p>Neo4emf come with a light-weight changelog recorder, so there is no
 need to add the newly created elements to the resource contents. To
 save the elements you simply use the save method</p>
-<div style = "color : black; background-color : #FFEBCD;">resource.save(null);</div>
+<div class = "code">resource.save(null);</div>
 </section>
       
       <footer>
-	  <p><br></p><p>This project is maintained by <a href="https://github.com/amine-ben">amine-ben</a></p>
-        <p><small>Hosted on GitHub Pages — Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      
+        <ul><li><a href="https://github.com/amine-ben/Neo4EMF/zipball/master">Download <strong>ZIP File</strong></a></li><li><a href="https://github.com/amine-ben/Neo4EMF/tarball/master">Download <strong>TAR Ball</strong></a></li><li><a href="
+https://github.com/amine-ben/Neo4EMF">View On <strong>GitHub</strong></a></li></ul>
+	   <p align = "middle">This project is maintained by <a href="https://github.com/amine-ben">amine-ben</a></p>
+	   <p align = "middle">Within <a href="http://www.emn.fr/z-info/atlanmod">Atlanmod research team</a></p>	  
+       <p align = "middle"><small>Hosted on GitHub Pages — Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>  		
         </footer>
     </div>
 <script src="javascripts/scale.fix.js"></script>
-    
-  </body></html>
+</body></html>
