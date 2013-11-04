@@ -72,15 +72,26 @@ when due.</p>
 
 <h3>
 <a name="generating-java-code" class="anchor" href="#generating-java-code"><span class="octicon octicon-link"></span></a>Generating java code</h3>
-
-<p>Having an ecore model and its genmodel, first you edit the genmodel properties as illustrated by the figure : </p>
-
-
-<img src="./images/image2.png" alt="Genmodel properties" align="middle">
-
-
+<p> Neo4EMF provides several ways to create the generator model to generate the Java API and Implementation from a given ecore model : </p>
+<ol>
+<li>From scratch :<ul>
+<li>New EMF Project</li>
+<li>Existing EMF Project</li>
+</ul></li>
+<li>From an existing genmodel</li>
+</ol>
+<h4> Create Generator model from scratch </h4>
+<p> To create an EMF project with a neo4EMF compatible genModel from scratch, first you create an EMF project using the new project wizard, then you select EMF project wizard, and click next. After entering a name for your project, select Ecore model (Neo4EMF Native) as depicted below. And finally import/load your model.</p>
+<img src="./images/SNAG-0005.png" alt="Genmodel properties" align="middle">
+<h4>Create a new generator model </h4>
+In the new project wizard, you select EMF Generator model and you click next. After choosing a location and a name for your genmodel click next, and select Ecore model (Neo4EMF Native) as depicted below. And finally load the model for which you want to create the genmodel.
+<h4>Migrate from an existing genmodel</h4>
+In case you already have a genmdodel, you can simply migrate to a neo4EMF pre-configured genmodel. See the picture afterwards.
+<img src="./images/migrate.png" alt="Genmodel properties" align="middle">
+<h4>Generate Java code</h4>
+Before generating the model make sure that your genmodel is pre-configured as depicted  by the figure below : 
+<img src="./images/SNAG-0011.png" alt="Genmodel properties" align="middle">
 <p>Therewith double-click the genModel and the right-click its windows and generate model code as depicted by the later figure :</p>
-
 
 <img style="width: 310px; height: 127px;" src="./images/image1.png" alt="Genmodel properties" align="middle" hspace="110">
 
