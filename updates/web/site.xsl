@@ -5,11 +5,11 @@
 <xsl:for-each select="site">
 	<html>
 	<head>
-	<title>Neo4EMF Update Site</title>
+	<title>Neo4EMF Updates</title>
 	<style>@import url("web/site.css");</style>
 	</head>
 	<body>
-	<h1 class="title">Neo4EMF Update Site</h1>
+	<h1 class="title">Neo4EMF Updates</h1>
 	<p class="bodyText"><xsl:value-of select="description"/></p>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<xsl:for-each select="category-def">
