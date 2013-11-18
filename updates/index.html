@@ -16,7 +16,20 @@
 				xmlFile.load("site.xml");
 				stylesheet.load("web/site.xsl");
 			} else {
-				alert("Document could not be loaded by browser.");
+				//alert("Document could not be loaded by browser.");
+				// Chrome
+				var xmlhttp = new window.XMLHttpRequest();
+				xmlhttp.open("GET","site.xml",false);
+				xmlhttp.send(null);
+				xmlFile = xmlhttp.responseXML.documentElement;
+				
+				xmlhttp.open("GET","web/site.xsl",false);
+				xmlhttp.send(null);
+				stylesheet = xmlhttp.responseXML.documentElement;
+				
+				// I HAVE TO CALL TWICE THIS FUNCTION, BECAUSE IT HAS A COUNTER THAT MUST BE 2 (THIS MAY BE FIXED TOO)
+				transform();
+				transform();
 			}
 			xmlFile.addEventListener("load", transform, false);
 			stylesheet.addEventListener("load", transform, false);
