@@ -5,7 +5,7 @@
 <xsl:for-each select="site">
 	<html>
 	<head>
-	<title>temp</title>
+	<title>Neo4EMF Update Site</title>
 	<style>@import url("web/site.css");</style>
 	</head>
 	<body>
