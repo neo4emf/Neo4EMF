@@ -1,190 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="shortcut icon" href="ico/logo-icon.png">
+<link rel="shortcut icon" href="ico/logo-icon.png"><title>Neo4EMF AtlanMod</title>
 
-<title>Neo4EMF AtlanMod</title>
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.css" rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="css/jumbotron-narrow.css" rel="stylesheet">
 <!-- Documentation extras -->
-<link href=" css/docs.css" rel="stylesheet">
-<link href=" css/pygments-manni.css" rel="stylesheet">
+<link href="%20css/docs.css" rel="stylesheet">
+<link href="%20css/pygments-manni.css" rel="stylesheet">
 </head>
-<body>
 
-<div class = "container">
+<body>
+<div class="container">
 <div class="header">
 <ul class="nav nav-pills pull-right">
 <li><a href="index.html">Home</a></li>
 <li class="active"><a href="wiki.html">Wiki</a></li>
+<li><a href="license.html">License</a></li>
 <li><a href="contact.html">Contact</a></li>
 </ul>
-<a href = "#"><img src = "img/logo-small.png"/></a>
+<a href="#"><img src="img/logo-small.png"></a>
 </div>
-
 <div class="row">
 <div class="col-md-3">
 <div class="bs-sidebar hidden-print" role="complementary">
 <ul class="nav bs-sidenav">
-	<li><a href="#genCode">Generating java code</a>
-		<ul class="nav">
-		<li><a href="#from-scratch">Create Generator model from scratch</a></li>
-		<li><a href="#genmodel">Create a new generator model</a></li>
-		<li><a href="#migrate">Migrate from an existing genmodel</a></li>
-		</ul>
-	</li>
-	<li><a href = "#rscCreation">Neo4emf Resource creation</a></li>
-	<li><a href = "#impXMI">Import from XMI file</a></li>
-	<li><a href = "#neoRfl">Neo4EMF reflection</a></li>
-	<li><a href = "#rscMng">Resource Management</a>
-		<ul class ="nav">
-		<li><a href = "#loadRoots">Load root objects</a></li>
-		<li><a href = "#loadAll">load all instances of same type</a></li>
-		</ul>
-	</li>
-	<li><a href = "#save">Save a resource</a></li>
+<li><a href="#genCode">Generating java code</a>
+<ul class="nav">
+<li><a href="#from-scratch">Create Generator
+model from scratch</a></li>
+<li><a href="#genmodel">Create a new generator
+model</a></li>
+<li><a href="#migrate">Migrate from an
+existing genmodel</a></li>
+</ul>
+</li>
+<li><a href="#rscCreation">Neo4emf Resource
+creation</a></li>
+<li><a href="#impXMI">Import from XMI file</a></li>
+<li><a href="#neoRfl">Neo4EMF reflection</a></li>
+<li><a href="#rscMng">Resource Management</a>
+<ul class="nav">
+<li><a href="#loadRoots">Load root objects</a></li>
+<li><a href="#loadAll">load all instances of
+same type</a></li>
+</ul>
+</li>
+<li><a href="#save">Save a resource</a></li>
 </ul>
 </div>
 </div>
 <div class="col-md-9" role="main">
-<h3 id = "genCode"> <a name="generating-java-code"><span class="octicon octicon-link"></span></a>Generating java code</h3>
-<p> Neo4EMF provides several ways to the generator model that generates the Java API and Implementation from a given ecore model: </p>
+<h3 id="genCode"> <a name="generating-java-code"><span class="octicon octicon-link"></span></a>Generating
+java code</h3>
+<p> Neo4EMF provides several ways to the generator model that
+generates the Java API and Implementation from a given ecore model: </p>
 <ol>
-<li>From scratch :<ul>
+<li>From scratch :
+<ul>
 <li>New EMF Project</li>
 <li>Existing EMF Project</li>
-</ul></li>
+</ul>
+</li>
 <li>From an existing genmodel</li>
 </ol>
-<h4 id = "from-scratch"> Create Generator model from scratch </h4>
-<p> To create an EMF project with a neo4EMF compatible genModel from scratch, first you create an EMF project using the new project wizard, then you select EMF project wizard, and click next. After entering a name for your project, select Ecore model (Neo4EMF Native) as depicted below. And finally import/load your model.</p>
-<img  class = "margin-img" src="./img/SNAG-0005.png" alt="Genmodel properties" align="middle">
-<h4 id = "genmodel">Create a new generator model </h4>
-In the new project wizard, you select EMF Generator model and you click next. After choosing a location and a name for your genmodel click next, and select Ecore model (Neo4EMF Native) as depicted below. And finally load the model for which you want to create the genmodel.
-<h4 id = "migrate" >Migrate from an existing genmodel</h4>
-In case you already have a genmdodel, you can simply migrate to a neo4EMF pre-configured genmodel. See the picture afterwards.
-<img class = "margin-img" src="./img/migrate.png" alt="Genmodel properties" align="middle">
+<h4 id="from-scratch"> Create Generator model from scratch
+</h4>
+<p> To create an EMF project with a neo4EMF compatible genModel
+from scratch, first you create an EMF project using the new project
+wizard, then you select EMF project wizard, and click next. After
+entering a name for your project, select Ecore model (Neo4EMF Native)
+as depicted below. And finally import/load your model.</p>
+<img class="margin-img" src="./img/SNAG-0005.png" alt="Genmodel properties" align="middle">
+<h4 id="genmodel">Create a new generator model </h4>
+In the new project wizard, you select EMF Generator model and you click
+next. After choosing a location and a name for your genmodel click
+next, and select Ecore model (Neo4EMF Native) as depicted below. And
+finally load the model for which you want to create the genmodel.
+<h4 id="migrate">Migrate from an existing genmodel</h4>
+In case you already have a genmdodel, you can simply migrate to a
+neo4EMF pre-configured genmodel. See the picture afterwards.
+<img class="margin-img" src="./img/migrate.png" alt="Genmodel properties" align="middle">
 <h4>Generate Java code</h4>
-Before generating the model make sure that your genmodel is pre-configured as depicted  by the figure below :
-<img class = "margin-img" src="./img/SNAG-0011.png" alt="Genmodel properties" align="middle">
-<p>Therewith double-click the genModel and the right-click its windows and generate model code as depicted by the later figure :</p>
-
-<img class = "margin-img" style="width: 310px; height: 127px;" src="./img/image1.png" alt="Genmodel properties" align="middle" hspace="110">
-
-<h3 id = "rscCreation"> <a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a>Neo4EMF Resource creation :</h3>
-
-<div class = "code">
-<p>
-// Create the resourceSet
-<br>ResourceSet rSet = new ResourceSetImpl();&nbsp;
+Before generating the model make sure that your genmodel is
+pre-configured as depicted by the figure below :
+<img class="margin-img" src="./img/SNAG-0011.png" alt="Genmodel properties" align="middle">
+<p>Therewith double-click the genModel and the right-click its
+windows and generate model code as depicted by the later figure :</p>
+<img class="margin-img" style="width: 310px; height: 127px;" src="./img/image1.png" alt="Genmodel properties" align="middle" hspace="110">
+<h3 id="rscCreation"> <a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a>Neo4EMF
+Resource creation :</h3>
+<div class="code">
+<p>// Create the resourceSet
+<br>
+ResourceSet rSet = new ResourceSetImpl();&nbsp;
 </p>
 <p>
 // Create an URI with neo4emf as protocol
-<br>URI uri = URI.createURI("neo4emf:/./MyFirstNeo4emfResource");
+<br>
+URI uri = URI.createURI("neo4emf:/./MyFirstNeo4emfResource");
 </p>
 <p>
 // Attach this protocol to INeo4emfResourceFactory
-<br>// If the relationshipMap is not set don't forget to register the package
-<br>// It is automatically generated
-<br>rSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put("neo4emf",
-INeo4emfResourceFactory.eINSTANCE.setRelationshipsMap(reltypes<br>.ReltypesMapping.getInstance().getMap()));
-
+<br>
+// If the relationshipMap is not set don't forget to register the
+package
+<br>
+// It is automatically generated
+<br>
+rSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put("neo4emf",
+INeo4emfResourceFactory.eINSTANCE.setRelationshipsMap(reltypes<br>
+.ReltypesMapping.getInstance().getMap()));
 </p>
 <p>
 // Create the resource
-<br>INeo4emfResource resource = (INeo4emfResource) rSet.createResource(uri);
-
+<br>
+INeo4emfResource resource = (INeo4emfResource)
+rSet.createResource(uri);
 </p>
 <p>
 // Register the package
-<br> EPackage.Registry.INSTANCE.put($package_nsURI$, $package_instance$);
+<br>
+EPackage.Registry.INSTANCE.put($package_nsURI$, $package_instance$);
 </p>
 </div>
-
 <h3>
-<a ><span class="octicon octicon-link"></span></a>Neo4emf common option :</h3>
-
+<a><span class="octicon octicon-link"></span></a>Neo4emf
+common option :</h3>
 <p>// TO COME</p>
-<h3 id ="impXMI">
-<a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a> Import from XMI files :
+<h3 id="impXMI">
+<a name="neo4emf-resource-creation-" class="anchor" href="#neo4emf-resource-creation-"><span class="octicon octicon-link"></span></a> Import
+from XMI files :
 </h3>
-Neo4EMF offers as well the possibility to import data from XMI into embedded neo4j DB files by using a simple method call
-<div class = "code">
+Neo4EMF offers as well the possibility to import data from XMI into
+embedded neo4j DB files by using a simple method call
+<div class="code">
 <p> // The method takes 3 arguments : 1- xmi file path
-<br>//2- the desired path-where to put the DB
-<br>//3- path to ecore file
-<br>Neo4emfResourceUtil.importFromXMI($xmi_file_path$,
+<br>
+//2- the desired path-where to put the DB
+<br>
+//3- path to ecore file
+<br>
+Neo4emfResourceUtil.importFromXMI($xmi_file_path$,
 $neo4j_db_folder_path$,$ecore_file_path$ );</p>
 </div>
-
-<h3 id = "neoRfl">
-<a ><span class="octicon octicon-link"></span></a> Neo4EMF Reflection :
+<h3 id="neoRfl">
+<a><span class="octicon octicon-link"></span></a>
+Neo4EMF Reflection :
 </h3>
-It is also possible to create and edit model elements with the refection API, you just need to set the package's factory instance
-<div class="code">
-<p> <br>// set the ePackageFactory to INeoFactory
-<br>// package_ is an instance of EPackage
-<br>package_.setEFactoryInstance(INeoFactory.eINSTANCE);
-<br>EFactory neoFactory = package_.getEFactoryInstance();
-<br>// create EObject
-<br>EObject neoObject = neoFactory.create((EClass)package_.getEClassifier($class_name$));
-<br>// get & set EObject
-<br>Object getValue = neoObject.eGet($structural_Featue$);
-<br>neoObject = neoObject.eSet($structural_feature$,$new_value$)
+It is also possible to create and edit model elements with the
+refection API, you just need to set the package's factory instance
+<pre>// set the ePackageFactory to INeoFactory<br>// package_ is an instance of EPackage<br>package_.setEFactoryInstance(INeoFactory.eINSTANCE);<br>EFactory neoFactory = package_.getEFactoryInstance();<br><br>// create EObject<br>EObject neoObject = neoFactory.create((EClass)package_.getEClassifier($class_name$));<br><br>// get &amp; set EObject<br>Object getValue = neoObject.eGet($structural_Featue$);<br>neoObject = neoObject.eSet($structural_feature$,$new_value$)<br></pre>
+<h3 id="rscMng">
+<a><span class="octicon octicon-link"></span></a>Resource
+management :</h3>
+<h4 id="loadRoots">
+<a><span class="octicon octicon-link"></span></a>Load
+root objects</h4>
+<p>to load the root elements of a resource you simply use the
+load method
 </p>
-</div>
-
-<h3 id = "rscMng">
-<a ><span class="octicon octicon-link"></span></a>Resource management :</h3>
-<h4 id = "loadRoots">
-<a  ><span class="octicon octicon-link"></span></a>Load root objects</h4>
-
-<p>to load the root elements of a resource you simply use the load method
-
-<div class = "code">resource.load(null);</div>
-<h4 id = "loadAll">
-<a name="load-all-instances-of-some-type" class="anchor" href="#load-all-instances-of-some-type"><span class="octicon octicon-link"></span></a>Load all Instances of some type</h4>
-to load all the instances of a given type, you just need to call the AllInstances() method from the resource.
-<div class = "code">((INeo4emfResource)resource).getAllInstances($eClass_name$);</div>
-<h3 id = "save">
-<a name="save-a-resource-" class="anchor" href="#save-a-resource-"><span class="octicon octicon-link"></span></a>Save a resource :</h3>
-
-<p>Neo4emf come with a light-weight changelog recorder, so there is no
+<div class="code">resource.load(null);</div>
+<h4 id="loadAll">
+<a name="load-all-instances-of-some-type" class="anchor" href="#load-all-instances-of-some-type"><span class="octicon octicon-link"></span></a>Load all
+Instances of some type</h4>
+to load all the instances of a given type, you just need to call the
+AllInstances() method from the resource.
+<div class="code">((INeo4emfResource)resource).getAllInstances($eClass_name$);</div>
+<h3 id="save">
+<a name="save-a-resource-" class="anchor" href="#save-a-resource-"><span class="octicon octicon-link"></span></a>Save a
+resource :</h3>
+<p>Neo4emf come with a light-weight changelog recorder, so there
+is no
 need to add the newly created elements to the resource contents. To
 save the elements you simply use the save method</p>
-<div class = "code">resource.save(null);</div>
+<div class="code">resource.save(null);</div>
+</div>
+</div>
+</div>
+      <div class="footer">
+	  <div class = "row">
+	  <div class="col-md-10">  
+  <p class="text-center"><small><a href="license.html">Code licensed under the Eclipse Public License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</small></p>
 
-</div>
-</div>
-</div>		<!--container-->
-<!-- Bootstrap core JavaScript
-================================================== -->
+  <p class="text-center"><small><a href="http://www.emn.fr/z-info/atlanmod/index.php/Main_Page">AtlanMod</a></small></p>
+  </div>
+  <div class="col-md-2">  
+  <a href="mailto:neo4emf@gmail.com"><img src="img/glyphicons_010_envelope.png"></a>  
+  <a href="https://twitter.com/softmodeling"><img src="img/glyphicons_social_31_twitter.png"></a>  
+  <a href="http://feeds.feedburner.com/ModelingLanguages-blog"><img src="img/glyphicons_social_37_rss.png"></a>
+  <a href="https://www.facebook.com/modelinglanguages"><img src="img/glyphicons_social_30_facebook.png"></a>    
+    </div>
+	  </div>
+	</div> 
+<!--container--><!-- Bootstrap core JavaScript ================================================== -->
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
 ga('create', 'UA-44316966-1', 'neo4emf.com');
 ga('send', 'pageview');
-
 </script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="js/bootstrap.js"></script>
-
 <script src="http://platform.twitter.com/widgets.js"></script>
 <script src="js/holder.js"></script>
-
 <script src="js/application.js"></script>
-</body>
-
-
-</html>
+</body></html>
