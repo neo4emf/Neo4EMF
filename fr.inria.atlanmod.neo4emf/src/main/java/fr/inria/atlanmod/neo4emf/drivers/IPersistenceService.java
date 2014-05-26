@@ -13,17 +13,12 @@ package fr.inria.atlanmod.neo4emf.drivers;
  * @author Amine BENELALLAM
  * */
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.index.Index;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
+import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.drivers.impl.NETransaction;
 
 public interface IPersistenceService {
@@ -91,27 +86,12 @@ public interface IPersistenceService {
 	public final RelationshipType SET_ATTRIBUTE = MetaRelation.SET_ATTRIBUTE;
 
 	/**
-	 * get the meta_elements' index
-	 * 
-	 * @return {@link Index}
-	 */
-	Index<Node> getMetaIndex();
-
-	Index<Relationship> getRelationshipIndex();
-
-	Node getAttributeNode(Node n);
-
-	/**
 	 * Create Node from eObject
 	 * 
 	 * @param eObject
 	 *            {@link EObject}
-	 * @return {@link Node}
 	 */
-
-	Node createNodeFromEObject(INeo4emfObject eObject);
-
-	Node createNodeFromEObject(INeo4emfObject eObject, boolean isTemporary);
+	IPersistedEObject createNodeFromEObject(INeo4emfObject eObject, boolean isTemporary);
 
 	// TODO check if EReference is appropriate here
 	void createLink(INeo4emfObject from, INeo4emfObject to, EReference ref);
@@ -125,125 +105,46 @@ public interface IPersistenceService {
 	 * @warning It doesn't check if an Attribute node is already created.
 	 * @param eObject
 	 *            {@link EObject}
-	 * @return {@link Node}
 	 */
-	Node createAttributeNodeForEObject(INeo4emfObject eObject);
+	void createAttributeNodeForEObject(INeo4emfObject eObject);
 
 	void deleteNodeFromEObject(INeo4emfObject eObject);
 
-	Relationship createAddLinkRelationship(INeo4emfObject from,
+	void createAddLinkRelationship(INeo4emfObject from,
 			INeo4emfObject to, EReference ref);
 
-	Relationship createRemoveLinkRelationship(INeo4emfObject from,
+	void createRemoveLinkRelationship(INeo4emfObject from,
 			INeo4emfObject to, EReference ref);
 
-	Relationship createDeleteRelationship(INeo4emfObject obj);
+	void createDeleteRelationship(INeo4emfObject obj);
 
-	List<Relationship> getTmpRelationships();
-
-	List<Node> getTmpNodes();
+	void persistDirtyRelationships();
 	
-	void flushTmpRelationships(List<Relationship> rels);
+	void createResourceNodeIfAbsent();
+	
+	// TODO find something to do with that
+//	List<Node> getNodesOnDemand(long nodeid, RelationshipType relationshipType);
+
+//	List<Node> getAddLinkNodesOnDemand(long nodeid,
+//			RelationshipType baseRelationshipType);
+
+//	List<Node> getRemoveLinkNodesOnDemand(long nodeid,
+//			RelationshipType baseRelationshipType);
+
 
 	/**
-	 * Return a List of the root nodes
-	 * 
-	 * @return
-	 */
-
-	List<Node> getAllRootNodes();
-
-	/**
-	 * Return the nodeType of a Node
-	 * 
-	 * @param n
-	 *            {@link Node}
-	 * @return {@link String}
-	 */
-	String getNodeType(Node n);
-
-	/**
-	 * Return the containing package of an node
-	 * 
-	 * @param n
-	 *            {@link Node}
-	 * @return {@link String}
-	 */
-	String getContainingPackage(Node n);
-
-	/**
-	 * query the backend with respect to nodeid as start {@link Node} and
-	 * relationshipType as the {@link RelationshipType}
-	 * 
-	 * @param nodeid
-	 *            {@link Long}
-	 * @param relationshipType
-	 *            {@link RelationshipType}
-	 * @return {@link List}
-	 */
-	List<Node> getNodesOnDemand(long nodeid, RelationshipType relationshipType);
-
-	List<Node> getAddLinkNodesOnDemand(long nodeid,
-			RelationshipType baseRelationshipType);
-
-	List<Node> getRemoveLinkNodesOnDemand(long nodeid,
-			RelationshipType baseRelationshipType);
-
-	/**
-	 * Return true if the node is root Node
-	 * 
-	 * @param node
-	 * @return
-	 */
-	boolean isRootNode(Node node);
-
-	/**
-	 * return a List of nodes of type eClass
-	 * 
-	 * @param eClass
-	 *            {@link EClass}
-	 * @return
-	 */
-	List<Node> getAllNodesOfType(EClass eClass);
-
-	/**
-	 * Stops the database service.
+	 * Stops the persistent service.
 	 */
 	void shutdown();
 
 	/**
-	 * Creates and starts a transaction
+	 * Create and start a transaction
 	 * 
 	 * @return
 	 */
 	NETransaction createTransaction();
 
 	void cleanIndexes();
-
-	/**
-	 * Returns database node for id
-	 * 
-	 * @param l
-	 *            the id
-	 * @return the database node
-	 */
-	Node getNodeById(long l);
-
-	/**
-	 * Creates a database node.
-	 * 
-	 * @return
-	 */
-	Node createNode();
-
-	/**
-	 * Returns a relationship type for a pair Class ID x Reference ID.
-	 * 
-	 * @param classID
-	 * @param referenceID
-	 * @return
-	 */
-	RelationshipType getRelationshipFor(int classID, int referenceID);
 
 	/**
 	 * Enum class for the meta_relations

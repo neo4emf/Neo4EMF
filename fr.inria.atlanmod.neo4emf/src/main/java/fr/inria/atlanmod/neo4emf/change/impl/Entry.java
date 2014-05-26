@@ -15,7 +15,7 @@ abstract public class Entry {
 		eObject.setMemoryLock();
 	}
 
-	public abstract void process(Serializer serializer, boolean isTmp);
+	public abstract void process(Serializer serializer);
 	
 	protected final void release() {
 		eObject.unsetMemoryLock();

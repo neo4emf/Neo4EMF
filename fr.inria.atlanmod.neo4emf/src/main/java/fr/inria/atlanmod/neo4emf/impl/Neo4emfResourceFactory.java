@@ -22,12 +22,12 @@ import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
 
 public class Neo4emfResourceFactory extends ResourceFactoryImpl implements
 		INeo4emfResourceFactory {
-
+	
 	private NEConfiguration configuration;
 
-	public Neo4emfResourceFactory(NEConfiguration nec) {
-		configuration = nec;
-	}
+	//public Neo4emfResourceFactory(NEConfiguration nec) {
+	//	configuration = nec;
+	//}
 
 	public Neo4emfResourceFactory() {
 		// TODO Auto-generated constructor stub

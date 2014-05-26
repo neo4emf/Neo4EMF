@@ -23,14 +23,9 @@ public class SetAttribute extends Entry {
 	}
 
 	@Override
-	public void process(Serializer serializer, boolean isTmp) {
-		serializer.setAttributeValue(eObject, eAttribute,newValue, isTmp);
+	public void process(Serializer serializer) {
+		serializer.setAttributeValue(eObject, eAttribute,newValue);
 		super.release();
-	}
-	
-	@Deprecated
-	public EAttribute geteAttribute() {
-		return eAttribute;
 	}
 
 }

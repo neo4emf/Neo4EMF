@@ -36,9 +36,11 @@ import org.neo4j.kernel.Traversal;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.RelationshipMapping;
+import fr.inria.atlanmod.neo4emf.connectors.IConnection;
+import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceService;
 import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
-import fr.inria.atlanmod.neo4emf.drivers.NEConnection;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfObject;
 
 public class PersistenceService implements IPersistenceService {
@@ -46,72 +48,62 @@ public class PersistenceService implements IPersistenceService {
 	/**
 	 * The database service connection.
 	 */
-	private final NEConnection connection;
+	private final IConnection connection;
 	
 	private final RelationshipMapping mapping;
 
 	protected PersistenceService(GraphDatabaseService service, NEConfiguration configuration) {
-		this.connection = new NEConnection(service, configuration);
+		this.connection = new NeoConnection(service, configuration);
 		this.mapping = configuration.ePackage().getRelationshipMapping();
 		connection.open();
 	}
 
-	@Override
-	public Index<Node> getMetaIndex() {
-		return index().forNodes(META_ELEMENTS);
-	}
+//	@Override
+//	public Index<Node> getMetaIndex() {
+//		return index().forNodes(META_ELEMENTS);
+//	}
+	
+//	@Override
+//	public Index<Relationship> getRelationshipIndex() {
+//		return index().forRelationships(META_RELATIONSHIPS);
+//	}
+	
+//	@Override
+//	public Node getAttributeNode(Node n) {
+//		Iterator<Relationship> setAttributeRels = n.getRelationships(SET_ATTRIBUTE).iterator();
+//		while(setAttributeRels.hasNext()) {
+//			return setAttributeRels.next().getEndNode();
+//		}
+//		return null;
+//	}
+
+//	private String getIdMetaValueFromClass(EClass c) {
+//		return c.getEPackage().getName() + "_" + c.getClassifierID();
+//	}
 	
 	@Override
-	public Index<Relationship> getRelationshipIndex() {
-		return index().forRelationships(META_RELATIONSHIPS);
-	}
-	
-	@Override
-	public Node getAttributeNode(Node n) {
-		Iterator<Relationship> setAttributeRels = n.getRelationships(SET_ATTRIBUTE).iterator();
-		while(setAttributeRels.hasNext()) {
-			return setAttributeRels.next().getEndNode();
-		}
-		return null;
-	}
-
-	private String getIdMetaValueFromClass(EClass c) {
-		return c.getEPackage().getName() + "_" + c.getClassifierID();
-	}
-
-	public Node createResourceNodeIfAbsent() {
-		if (getMetaIndex().get(ID_META, RESOURCE_NODE).getSingle() != null)
-			return getMetaIndex().get(ID_META, RESOURCE_NODE).getSingle();
-		Node n = createNode();
-		getMetaIndex().putIfAbsent(n, ID_META, RESOURCE_NODE);
-		return n;
+	public void createResourceNodeIfAbsent() {
+		connection.createResourceNodeIfAbsent();
 	}
 
 	@Override
-	public Node createNodeFromEObject(INeo4emfObject eObject) {
-		return createNodeFromEObject(eObject, false);
-	}
-
-	@Override
-	public Node createNodeFromEObject(INeo4emfObject eObject, boolean isTemporary) {
-		return connection.addObject(eObject,isTemporary);
+	public IPersistedEObject createNodeFromEObject(INeo4emfObject eObject, boolean isDirty) {
+		return connection.addObject(eObject,isDirty);
 	}
 	
 	@Override
 	public void createLink(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		//connection.createRelationship(from,to,getRelationshipFor(from.eClass().getClassifierID(), ref.getFeatureID()));
 		connection.createRelationship(from, to, getRelationshipFor(ref.getEContainingClass().getClassifierID(), ref.getFeatureID()));
 	}
 	
 	@Override
 	public void removeLink(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-//		connection.removeRelationship(from,to,getRelationshipFor(from.eClass().getClassifierID(), ref.getFeatureID()));
 		connection.createRelationship(from, to, getRelationshipFor(ref.getEContainingClass().getClassifierID(), ref.getFeatureID()));
 	}
 	
 	@Override
-	public Node createAttributeNodeForEObject(INeo4emfObject eObject) {
-		return connection.addAttribute(eObject);
+	public void createAttributeNodeForEObject(INeo4emfObject eObject) {
+		connection.addAttribute(eObject);
 	}
 	
 	@Override
@@ -120,44 +112,49 @@ public class PersistenceService implements IPersistenceService {
 	}
 	
 	@Override
-	public Relationship createAddLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		return connection.addTmpRelationshipBetween(from, to, getRelationshipFor(ref.getEContainingClass().getClassifierID(), ref.getFeatureID()));
+	public void createAddLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
+		connection.addTmpRelationshipBetween(from, to, getRelationshipFor(ref.getEContainingClass().getClassifierID(), ref.getFeatureID()));
 	}
 	
 	@Override
-	public Relationship createRemoveLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		return connection.removeTmpRelationshipBetween(from, to, getRelationshipFor(from.eClass().getClassifierID(), ref.getFeatureID()));
+	public void createRemoveLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
+		connection.removeTmpRelationshipBetween(from, to, getRelationshipFor(from.eClass().getClassifierID(), ref.getFeatureID()));
 	}
 	
 	@Override
-	public Relationship createDeleteRelationship(INeo4emfObject obj) {
-		return connection.addDeleteRelationship(obj);
+	public void createDeleteRelationship(INeo4emfObject obj) {
+		connection.addDeleteRelationship(obj);
 	}
 	
-	@Override
-	public List<Relationship> getTmpRelationships() {
-		Iterator<Relationship> it = this.getRelationshipIndex().get(ID_META, TMP_RELATIONSHIP).iterator();
-		ArrayList<Relationship> rels = new ArrayList<Relationship>();
-		while(it.hasNext()) {
-			rels.add(it.next());
-		}
-		return rels;
-	}
+//	@Override
+//	public List<Relationship> getTmpRelationships() {
+//		Iterator<Relationship> it = this.getRelationshipIndex().get(ID_META, TMP_RELATIONSHIP).iterator();
+//		ArrayList<Relationship> rels = new ArrayList<Relationship>();
+//		while(it.hasNext()) {
+//			rels.add(it.next());
+//		}
+//		return rels;
+//	}
 	
 	@Override
-	public List<Node> getTmpNodes() {
-		Iterator<Node> it = this.getMetaIndex().get(ID_META, TMP_NODE).iterator();
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		while(it.hasNext()) {
-			nodes.add(it.next());
-		}
-		return nodes;
+	public void persistDirtyRelationships() {
+		this.connection.persistDirtyRelationships();
 	}
 	
-	@Override
-	public void flushTmpRelationships(List<Relationship> rels) {
-		connection.flushTmpRelationships(rels);
-	}
+//	@Override
+//	public List<Node> getTmpNodes() {
+//		Iterator<Node> it = this.getMetaIndex().get(ID_META, TMP_NODE).iterator();
+//		ArrayList<Node> nodes = new ArrayList<Node>();
+//		while(it.hasNext()) {
+//			nodes.add(it.next());
+//		}
+//		return nodes;
+//	}
+	
+//	@Override
+//	public void flushTmpRelationships(List<Relationship> rels) {
+//		connection.flushTmpRelationships(rels);
+//	}
 
 	// TODO, check if it is still needed
 	private boolean isRoot(Neo4emfObject eObject) {		
@@ -168,13 +165,13 @@ public class PersistenceService implements IPersistenceService {
 		}
 	}
 
-	@Override
-	public List<Node> getAllRootNodes() {
-		//Index<Node> index = getMetaIndex();
-		Node resourceNode = this.createResourceNodeIfAbsent();
-		assert resourceNode != null : "Null resource node";
-		return fetchNodesByRT(resourceNode.getId(), IS_ROOT);
-	}
+//	@Override
+//	public List<Node> getAllRootNodes() {
+//		//Index<Node> index = getMetaIndex();
+//		Node resourceNode = this.createResourceNodeIfAbsent();
+//		assert resourceNode != null : "Null resource node";
+//		return fetchNodesByRT(resourceNode.getId(), IS_ROOT);
+//	}
 
 	
 	private List<Node> fetchNodesByRT(long nodeId, RelationshipType relType, Direction direction) {
@@ -263,19 +260,19 @@ public class PersistenceService implements IPersistenceService {
 	// return setUpTraversal(nodeId, relType, Direction.OUTGOING);
 	// }
 
-	@Override
-	public String getNodeType(Node n) {
-		List<Node> list = fetchNodesByRT(n.getId(), INSTANCE_OF);
-		return (String) (list.size() == 1 ? list.get(0)
-				.getProperty(ECLASS_NAME) : null);
-	}
+//	@Override
+//	public String getNodeType(Node n) {
+//		List<Node> list = fetchNodesByRT(n.getId(), INSTANCE_OF);
+//		return (String) (list.size() == 1 ? list.get(0)
+//				.getProperty(ECLASS_NAME) : null);
+//	}
 
-	@Override
-	public String getContainingPackage(Node n) {
-		List<Node> list = fetchNodesByRT(n.getId(), INSTANCE_OF);
-		return (String) (list.size() == 1 ? list.get(0).getProperty(NS_URI)
-				: null);
-	}
+//	@Override
+//	public String getContainingPackage(Node n) {
+//		List<Node> list = fetchNodesByRT(n.getId(), INSTANCE_OF);
+//		return (String) (list.size() == 1 ? list.get(0).getProperty(NS_URI)
+//				: null);
+//	}
 
 	@Override
 	public List<Node> getNodesOnDemand(long nodeid,
@@ -295,26 +292,26 @@ public class PersistenceService implements IPersistenceService {
 		return fetchNodesWithRemoveLink(nodeid,baseRelationshipType);
 	}
 
-	@Override
-	public boolean isRootNode(Node node) {
-		List<Node> nodes = fetchNodesByRT(node.getId(), IS_ROOT,
-				Direction.INCOMING);
-		if (nodes.size() == 0)
-			return false;
-		if (nodes.size() == 1 && nodes.get(0).equals(node))
-			return false;
-		return true;
-	}
+//	@Override
+//	public boolean isRootNode(Node node) {
+//		List<Node> nodes = fetchNodesByRT(node.getId(), IS_ROOT,
+//				Direction.INCOMING);
+//		if (nodes.size() == 0)
+//			return false;
+//		if (nodes.size() == 1 && nodes.get(0).equals(node))
+//			return false;
+//		return true;
+//	}
 
-	@Override
-	public List<Node> getAllNodesOfType(EClass eClass) {
-		Node eClassNode = getMetaIndex().get(ID_META,
-				getIdMetaValueFromClass(eClass)).getSingle();
-		if (eClassNode == null)
-			return Collections.emptyList();
-		return fetchNodesByRT(eClassNode.getId(), INSTANCE_OF,
-				Direction.INCOMING);
-	}
+//	@Override
+//	public List<Node> getAllNodesOfType(EClass eClass) {
+//		Node eClassNode = getMetaIndex().get(ID_META,
+//				getIdMetaValueFromClass(eClass)).getSingle();
+//		if (eClassNode == null)
+//			return Collections.emptyList();
+//		return fetchNodesByRT(eClassNode.getId(), INSTANCE_OF,
+//				Direction.INCOMING);
+//	}
 
 
 	public NETransaction createTransaction() {
@@ -325,31 +322,39 @@ public class PersistenceService implements IPersistenceService {
 		connection.cleanIndexes();
 	}
 	
-	public RelationshipType getRelationshipFor(int classID, int referenceID) {
-		return mapping.relationshipAt(classID, referenceID);
-	}
+//	public RelationshipType getRelationshipFor(int classID, int referenceID) {
+//		return mapping.relationshipAt(classID, referenceID);
+//	}
 
-	public Node createNode() {
-		return connection.createNode();
-	}
+//	public Node createNode() {
+//		return connection.createNode();
+//	}
 
-	public Node getNodeById(long id) {
-		return connection.getNodeById(id);
-	}
-
-
-	public Relationship getRelationshipById(long id) {
-		return connection.getRelationshipById(id);
-	}
+//	public Node getNodeById(long id) {
+//		return connection.getNodeById(id);
+//	}
 
 
-	public IndexManager index() {
-		return connection.index();
-	}
+//	public Relationship getRelationshipById(long id) {
+//		return connection.getRelationshipById(id);
+//	}
+
+
+	//public IndexManager index() {
+	//	return connection.index();
+	//}
 
 	@Override
 	public void shutdown() {
 		connection.close();
+	}
+	
+	public IPersistedEObject getPersistedEObject(INeo4emfObject eObject) {
+		return connection.getPersistedEObjectFrom(eObject);
+	}
+	
+	public IPersistedEObject getNodeById(INeo4emfObject eObject) {
+		return connection.getNodeById(eObject.getNodeId());
 	}
 	
 

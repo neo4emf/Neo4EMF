@@ -14,8 +14,8 @@ public class NewObject extends Entry {
     }
 
 	@Override
-	public void process(Serializer serializer, boolean isTmp) {
-		serializer.createNewObject(eObject,isTmp);
+	public void process(Serializer serializer) {
+		serializer.createNewObject(eObject);
 		super.release();
 	}
     

@@ -13,25 +13,11 @@ package fr.inria.atlanmod.neo4emf.drivers;
  * @author Amine BENELALLAM
  * */
 
-import java.util.Map;
 
 public interface ISerializer {
 	
-	String MAX_OPERATIONS_PER_TRANSACTION = "max_oper_per_trans";
-	
-	String TMP_SAVE = "tmp_save";
-	
-	int DEFAULT_TRANSACTIONS_COUNT = 10000;
-	
-	boolean DEFAULT_TMP_SAVE = false;
-	
-	String [] saveOptions = {MAX_OPERATIONS_PER_TRANSACTION, TMP_SAVE};
-	
-	Object [] saveDefaultValues={DEFAULT_TRANSACTIONS_COUNT, DEFAULT_TMP_SAVE};
-	
 	/**
-	 * @see IPersistenceManager#save(Map)
-	 * @param options
+	 * @see IPersistenceManager#save()
 	 */
-	void save(Map<String, Object> options);
+	void save(boolean dirtySave);
 }

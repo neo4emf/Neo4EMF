@@ -13,9 +13,9 @@ public class BidirectionalRemoveLink extends RemoveLink {
 	}
 
 	@Override
-	public void process(Serializer serializer, boolean isTmp) {
-		serializer.removeExistingLink(eObject, eReference, referencedEObject, isTmp);
-		serializer.removeExistingLink(referencedEObject, eReference.getEOpposite(), eObject, isTmp);
+	public void process(Serializer serializer) {
+		serializer.removeExistingLink(eObject, eReference, referencedEObject);
+		serializer.removeExistingLink(referencedEObject, eReference.getEOpposite(), eObject);
 		super.release();
 	}
 	

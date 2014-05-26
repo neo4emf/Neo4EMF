@@ -25,12 +25,12 @@ public class NEConfiguration {
 	
 	private final URI uri;
 	
-	private final Map<String,String> options;
+	private final Map<String,Object> options;
 	
 	private final File path;
 	
 	
-	public NEConfiguration(PersistentPackage ep, URI uri, Map<String,String> map) {
+	public NEConfiguration(PersistentPackage ep, URI uri, Map<String,Object> map) {
 		this.ePackage = ep;
 		this.uri = uri;
 		this.options = map;
@@ -47,7 +47,7 @@ public class NEConfiguration {
 		return uri;
 	}
 	
-	public Map<String,String> options() {
+	public Map<String,Object> options() {
 		return options;
 	}
 	

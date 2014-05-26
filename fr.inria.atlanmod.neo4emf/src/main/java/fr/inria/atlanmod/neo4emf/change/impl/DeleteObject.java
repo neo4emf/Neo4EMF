@@ -14,8 +14,8 @@ public class DeleteObject extends Entry {
 	}
 
 	@Override
-	public void process(Serializer serializer, boolean isTmp) {
-		serializer.deleteExistingObject(eObject, isTmp);
+	public void process(Serializer serializer) {
+		serializer.deleteExistingObject(eObject);
 		super.release();
 	}
 

@@ -14,12 +14,10 @@
 package fr.inria.atlanmod.neo4emf.drivers;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
@@ -30,32 +28,16 @@ import fr.inria.atlanmod.neo4emf.drivers.impl.NETransaction;
 public interface IPersistenceManager {
 
 	/**
-	 * save the resource with respect to the options gave in parameter
-	 * 
-	 * @param options
-	 *            {@link Map}
-	 * @see ISerializer#save(Map)
-	 */
-	public void save(Map<?, ?> options);
-
-	/**
-	 * Save the resource using the default options
+	 * Save the resource
 	 */
 	public void save();
+	
+	public void dirtySave();
 
 	/**
-	 * Load the resource using the default options
+	 * Load the resource
 	 */
 	public void load();
-
-	/**
-	 * Load the resource with respect to the options gave in parameter
-	 * 
-	 * @param options
-	 *            {@link Map}
-	 * @see ILoader#load(Map)
-	 */
-	public void load(Map<?, ?> options);
 
 	/**
 	 * Create a backend's transaction
@@ -79,9 +61,9 @@ public interface IPersistenceManager {
 	 * @throws NullPointerException
 	 * @see {@link IPersistenceService#getNodeById(long)}
 	 */
-	public Node getAttributeNodeById(EObject eObj);
+//	public Node getAttributeNodeById(EObject eObj);
 	
-	public Node getAttributeNode(Node n);
+//	public Node getAttributeNode(Node n);
 	
 	/**
 	 * Add object to the resource contents
@@ -127,7 +109,7 @@ public interface IPersistenceManager {
 	 */
 	public EObject getContainerOnDemand(EObject eObject, int featureId);
 	
-	public INeo4emfObject getObjectFromProxy(EClass eClassifier, Node n);
+//	public INeo4emfObject getObjectFromProxy(EClass eClassifier, Node n);
 	
 	/**
 	 * <p>

@@ -24,11 +24,8 @@ import fr.inria.atlanmod.neo4emf.change.IChangeLog;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
 import fr.inria.atlanmod.neo4emf.drivers.ILoader;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceManager;
-import fr.inria.atlanmod.neo4emf.drivers.ISerializer;
 
 public interface INeo4emfResource extends Resource, Resource.Internal {
-
-	public String MAX_OPERATIONS_PER_TRANSACTION = ISerializer.MAX_OPERATIONS_PER_TRANSACTION;
 
 	public static final String DUPLICATION_TOLERANT = ILoader.DUPLICATION_TOLERANT;
 
@@ -74,18 +71,14 @@ public interface INeo4emfResource extends Resource, Resource.Internal {
 	 * saves the model changes that have been done
 	 */
 	public void save();
+	public void dirtySave();
+	
+	public void load();
 
 	/**
 	 * Unlock the resource
 	 */
 	public void shutdown();
-
-	/**
-	 * saves the model changes according to the options in the map
-	 * 
-	 * @param options
-	 *            {@link Map}
-	 */
 
 	/**
 	 * return all the instances of type <b>eClass</b>

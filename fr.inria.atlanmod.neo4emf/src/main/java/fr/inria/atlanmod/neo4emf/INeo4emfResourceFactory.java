@@ -21,11 +21,8 @@ import fr.inria.atlanmod.neo4emf.impl.Neo4emfResourceFactory;
 
 public interface INeo4emfResourceFactory extends Resource.Factory {
 
-	/**
-	 * The singleton instance
-	 */
-	INeo4emfResourceFactory eINSTANCE = Neo4emfResourceFactory.init();
-
+	public static INeo4emfResourceFactory eINSTANCE = null;
+	
 	/**
 	 * Creates a resource from an URI
 	 */

@@ -21,32 +21,30 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
+import fr.inria.atlanmod.neo4emf.connectors.IConnection;
+import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
 import fr.inria.atlanmod.neo4emf.drivers.ILoader;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceManager;
-import fr.inria.atlanmod.neo4emf.drivers.IPersistenceService;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceServiceFactory;
 import fr.inria.atlanmod.neo4emf.drivers.IProxyManager;
 import fr.inria.atlanmod.neo4emf.drivers.ISerializer;
 import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
+import fr.inria.atlanmod.neo4emf.drivers.NEConnectionFactory;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfObject;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfResource;
 import fr.inria.atlanmod.neo4emf.resourceUtil.Neo4emfResourceUtil;
 
 public class PersistenceManager implements IPersistenceManager {
 
-	/**
-	 * the persistence Backend {@link PersistenceService}
-	 */
-	protected IPersistenceService persistenceService;
+	protected IConnection connection;
 	/**
 	 * The loader and eObjects builder {@link Loader}
 	 */
@@ -64,8 +62,6 @@ public class PersistenceManager implements IPersistenceManager {
 	 */
 	protected IProxyManager proxyManager;
 	
-	private int sessionId = 0;
-
 	/**
 	 * Global constructor
 	 * 
@@ -80,35 +76,21 @@ public class PersistenceManager implements IPersistenceManager {
 	
 	public PersistenceManager(INeo4emfResource neo4emfResource,
 			NEConfiguration configuration) {
-		
+		assert configuration != null : "Null configuration";
+		if(configuration.options().containsKey("max_operation_per_transaction")) {
+			maxOperationPerTransaction = (int)configuration.options().get("max_operation_per_transaction");
+		}
 		this.resource = neo4emfResource;
-		this.persistenceService = IPersistenceServiceFactory.eINSTANCE
-				.createPersistenceService(configuration);
-		this.serializer = new Serializer(this);
+		// TODO share the connection between seria and loader
+		this.serializer = new Serializer(this, configuration);
 		this.proxyManager = new ProxyManager();
 		this.loader = new Loader(this);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void save(Map<?, ?> options) {
-		try {
-			this.serializer.save((Map<String, Object>) options);
-		} catch (Exception e) {
-			shutdown();
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public void load() {
-		load(null);
-	}
-
-	@Override
-	public void load(Map<?, ?> options) {
 		try {
-			loader.load(options);
+			loader.load();
 		} catch (Exception e) {
 			shutdown();
 			e.printStackTrace();
@@ -117,157 +99,17 @@ public class PersistenceManager implements IPersistenceManager {
 
 	@Override
 	public void save() {
-		serializer.save(null);
-	}
-
-	@Override
-	public NETransaction createTransaction() {
-		return persistenceService.createTransaction();
+		serializer.save(false);
 	}
 	
 	@Override
-	public void cleanIndexes() {
-		persistenceService.cleanIndexes();
-	}
-	
-	@Override
-	public void shutdown() {
-		persistenceService.shutdown();
-	}
-
-	//@Override
-	public Node getNodeById(EObject eObj) {
-		assert ((INeo4emfObject) eObj).getNodeId() >= 0 : "nodeId is > -1";
-		
-		Node result = persistenceService.getNodeById(((INeo4emfObject) eObj)
-				.getNodeId());
-		if (result == null) {
-			throw new NullPointerException(" Cannot find the node ");
-		} else {
-			return result;
-		}
-	}
-	
-//	@Override
-	public Node getAttributeNodeById(EObject eObj) {
-		assert ((INeo4emfObject)eObj).getAttributeNodeId() > -1 : "attribute node id is > -1";
-
-		Node result = persistenceService.getNodeById(((INeo4emfObject)eObj).getAttributeNodeId());
-		return result;
-	}
-	
-//	@Override
-	public Node getAttributeNode(Node n) {
-		// Strange to have node here
-		Node result = persistenceService.getAttributeNode(n);
-		return result;
-	}
-	
-//	@Override
-	public List<Relationship> getTmpRelationships() {
-		return persistenceService.getTmpRelationships();
-	}
-	
-//	@Override
-//	public List<Node> getTmpNodes() {
-//		return persistenceService.getTmpNodes();
-//	}
-//	
-//	@Override
-	public void flushTmpRelationships(List<Relationship> rels) {
-		persistenceService.flushTmpRelationships(rels);	
-	}
-
-//	@Override
-//	public Node createNodefromEObject(EObject eObject) {
-//		return persistenceService.createNodeFromEObject(eObject,false);
-//	}
-	
-//	@Override
-//	public Node createNodefromEObject(EObject eObject, boolean isTemporary) {
-//		Node n = persistenceService.createNodeFromEObject(eObject,isTemporary);
-//		((INeo4emfObject)eObject).setNodeId(n.getId());
-//		proxyManager.putToProxy((INeo4emfObject)eObject);
-//		return n;
-//	}
-	
-//	@Override
-	public void deleteNodeFromEObject(INeo4emfObject eObject) {
-		persistenceService.deleteNodeFromEObject(eObject);
-	}
-	
-//	@Override
-	public Node createAttributeNodeForEObject(INeo4emfObject eObject) {
-		return persistenceService.createAttributeNodeForEObject(eObject);
-	}
-	
-//	@Override
-	public Relationship createAddLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		// FIXME see if it is good (case of an old object that has references to an other one
-		// which hasn't been yet created). If this reference is not bidirectionnal there will be
-		// a problem
-		if(from.getSessionId() >= 0 && to.getSessionId() == -1 && ref.getEOpposite() == null) {
-			Relationship r =  persistenceService.createAddLinkRelationship(from, to, ref);
-			if(r != null) {
-				to.setSessionId(sessionId);
-			}
-		}
-		else if(from.getSessionId() >= 0 && to.getSessionId() >= 0) {
-			return persistenceService.createAddLinkRelationship(from, to, ref);
-		}
-		return null;
-	}
-	
-//	@Override
-	public Relationship createRemoveLinkRelationship(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		return persistenceService.createRemoveLinkRelationship(from, to, ref);
-	}
-	
-//	@Override
-	public Relationship createDeleteRelationship(INeo4emfObject obj) {
-		return persistenceService.createDeleteRelationship(obj);
-	}
-
-	//@Override
-	public RelationshipType getRelTypefromERef(int classID, int referenceID) {
-		return persistenceService.getRelationshipFor(classID, referenceID);
-	}
-	
-	public Node createNodefromEObject(INeo4emfObject eObject, boolean isTemporary) {
-		Node n = persistenceService.createNodeFromEObject(eObject,isTemporary);
-		eObject.setNodeId(n.getId());
-		eObject.setSessionId(sessionId);
-		proxyManager.putToProxy((INeo4emfObject)eObject);
-		return n;
-	}
-	
-	public void createLink(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		persistenceService.createLink(from,to,ref);
-	}
-	
-	public void removeLink(INeo4emfObject from, INeo4emfObject to, EReference ref) {
-		persistenceService.removeLink(from,to,ref);
-	}
-	
-	//@Override
-	public List<Node> getAllRootNodes() {
-		return persistenceService.getAllRootNodes();
+	public void dirtySave() {
+		serializer.save(true);
 	}
 
 	@Override
-	public void addObjectsToContents(List<INeo4emfObject> objects) {
-		resource.getContents().addAll(objects);
-	}
-
-	
-	//@Override
-	public String getNodeType(Node n) {
-		return persistenceService.getNodeType(n);
-	}
-
-	//@Override
-	public String getNodeContainingPackage(Node n) {
-		return persistenceService.getContainingPackage(n);
+	public void shutdown() {
+		connection.close();
 	}
 
 	@Override
@@ -300,6 +142,7 @@ public class PersistenceManager implements IPersistenceManager {
 				String stri = Neo4emfResourceUtil.formatRelationshipName(parent,feature);
 				relationship = DynamicRelationshipType.withName(stri);
 			}
+			// TODO All the node processing should be done in the connexion, and return only the EObjects associated
 			List <Node> nodes= persistenceService.getNodesOnDemand(((INeo4emfObject)obj).getNodeId(),
 						relationship);
 			List<Node> addLinkNodes = persistenceService.getAddLinkNodesOnDemand(((INeo4emfObject)obj).getNodeId(), relationship);
@@ -330,10 +173,6 @@ public class PersistenceManager implements IPersistenceManager {
 		return eResult;
 	}
 
-	public boolean isRootNode(Node node) {
-		return persistenceService.isRootNode(node);
-	}
-
 	@Override
 	public EList<INeo4emfObject> getAllInstancesOfType(EClass eClass) {
 		EList<EClass> classesList = ((Loader) loader).subClassesOf(eClass);
@@ -358,11 +197,6 @@ public class PersistenceManager implements IPersistenceManager {
 	public INeo4emfResource getResource() {
 		return resource;
 	}
-
-	@Override
-	public INeo4emfObject getObjectFromProxy(EClass eClassifier, Node n) {
-		return proxyManager.getObjectFromProxy(eClassifier, n.getId());
-	}
 	
 	/**
 	 * {@link IPersistenceManager#getProxyManager()}
@@ -372,8 +206,11 @@ public class PersistenceManager implements IPersistenceManager {
 		return proxyManager;
 	}
 	
-	public void startNewSession() {
-		sessionId++;
+	public void registerEObject(INeo4emfObject eObject, IPersistedEObject persistedObject) {
+		proxyManager.putToProxy(eObject);
 	}
 	
+	public INeo4emfObject getObjectFromProxy(EClass eClassifier, Node n) {
+		return proxyManager.getObjectFromProxy(eClassifier, n.getId());
+	}
 }

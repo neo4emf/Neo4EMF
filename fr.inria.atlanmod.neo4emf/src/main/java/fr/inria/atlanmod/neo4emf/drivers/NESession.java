@@ -13,6 +13,7 @@
 package fr.inria.atlanmod.neo4emf.drivers;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
@@ -22,7 +23,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.INeo4emfResourceFactory;
 import fr.inria.atlanmod.neo4emf.PersistentPackage;
-import fr.inria.atlanmod.neo4emf.change.impl.ChangeLogFactory;
 
 /**
  * 
@@ -59,14 +59,15 @@ public class NESession {
 	 * Creates a resource from a URI.
 	 * If the resource already exists, just opens it.
 	 * @param uri
-	 * @param changeLogSize the maximum size of the ChangeLog associated to the created resource
+	 * @param options the options for the session
 	 * @return The resource.
 	 */
 
-	public INeo4emfResource createResource(URI uri, int changeLogSize) {
-//		INeo4emfResource resource;
-		ChangeLogFactory.setChangeLogSize(changeLogSize);
-		configuration = new NEConfiguration(ePackage, uri, Collections.<String,String>emptyMap());
+	public INeo4emfResource createResource(URI uri, Map<String,Object> options) {
+		if(options == null) {
+			options  = Collections.<String,Object>emptyMap();
+		}
+		configuration = new NEConfiguration(ePackage, uri, options);
 		INeo4emfResourceFactory.eINSTANCE.setConfiguration(configuration);
 		resource = (INeo4emfResource) resourceSet.createResource(uri);
 		resource.setURI(uri);

@@ -17,8 +17,8 @@ public class UnidirectionalAddLink extends AddLink {
 	}
 
 	@Override
-	public void process(Serializer serializer, boolean isTmp) {
-		serializer.addNewLink(eObject, eReference, referencedEObject,isTmp);
+	public void process(Serializer serializer) {
+		serializer.addNewLink(eObject, eReference, referencedEObject);
 		super.release();
 	}
 }

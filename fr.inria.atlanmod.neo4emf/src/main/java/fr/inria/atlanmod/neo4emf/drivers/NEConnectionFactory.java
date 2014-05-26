@@ -17,36 +17,44 @@ import java.util.List;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.index.lucene.LuceneKernelExtensionFactory;
 import org.neo4j.kernel.extension.KernelExtensionFactory;
 import org.neo4j.kernel.impl.cache.CacheProvider;
-import org.neo4j.kernel.impl.cache.NoCacheProvider;
 import org.neo4j.kernel.impl.cache.WeakCacheProvider;
+
+import fr.inria.atlanmod.neo4emf.connectors.IConnection;
+import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
 
 public class NEConnectionFactory {
 	
-	public NEConnection createNEConnection(NEConfiguration configuration) {
-		GraphDatabaseService db;
-		NEConnection connection;
-		
+	public static IConnection createNEConnection(NEConfiguration configuration) {
 		// the cache providers
 		ArrayList<CacheProvider> cacheList = new ArrayList<CacheProvider>();
-		System.out.println("pouetpouetpouetpouet");
+		System.out.println("Creating db configuration");
 		cacheList.add(new WeakCacheProvider());
 
-		
 		// the kernel extensions
 		LuceneKernelExtensionFactory lucene = new LuceneKernelExtensionFactory();
 		List<KernelExtensionFactory<?>> extensions = new ArrayList<KernelExtensionFactory<?>>();
 		extensions.add(lucene);
+			
+//		Map<String,String> config = new HashMap<String,String>();
+//				config.put("cache_type", "weak");
 
 		// the database setup
 		GraphDatabaseFactory gdbf = new GraphDatabaseFactory();
 		gdbf.setKernelExtensions(extensions);
 		gdbf.setCacheProviders(cacheList);
-		db = gdbf.newEmbeddedDatabase(configuration.path().getAbsolutePath());
-		connection = new NEConnection(db, configuration);
-		
+		GraphDatabaseService db = null;
+		try {
+			db = gdbf.newEmbeddedDatabaseBuilder(configuration.path().getAbsolutePath())
+					.setConfig(GraphDatabaseSettings.cache_type, WeakCacheProvider.NAME)
+					.newGraphDatabase();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		IConnection connection = new NeoConnection(db, configuration);
 		return connection;
 	}
 

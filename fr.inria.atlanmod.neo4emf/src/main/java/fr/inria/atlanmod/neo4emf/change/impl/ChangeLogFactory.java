@@ -6,14 +6,11 @@ import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.change.IChangeLog;
 import fr.inria.atlanmod.neo4emf.change.IChangeLogFactory;
+import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
 
 public class ChangeLogFactory implements IChangeLogFactory {
-
-	public static int CHANGELOG_SIZE = 10;
 	
-	public static void setChangeLogSize(int size) {
-		CHANGELOG_SIZE = size;
-	}
+	public static int DEFAULT_CL_SIZE = 100000;
 	
 	public static IChangeLogFactory init() {
 		if (eINSTANCE == null) {
@@ -24,8 +21,11 @@ public class ChangeLogFactory implements IChangeLogFactory {
 	}
 
 	@Override
-	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource) {
-		return new ChangeLog(CHANGELOG_SIZE,resource);
+	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource, NEConfiguration configuration) {
+		if(configuration.options().containsKey("cl_size")) {
+			return new ChangeLog(resource,(int)configuration.options().get("cl_size"));
+		}
+		return new ChangeLog(resource, DEFAULT_CL_SIZE);
 	}
 	
 	@Override

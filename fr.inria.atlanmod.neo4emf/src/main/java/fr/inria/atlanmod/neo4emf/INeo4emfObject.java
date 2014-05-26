@@ -12,44 +12,42 @@ package fr.inria.atlanmod.neo4emf;
  * Descritpion ! To come
  * @author Amine BENELALLAM
  * */
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-
-import org.neo4j.graphdb.Node;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import fr.inria.atlanmod.neo4emf.connectors.IConnection;
 
 public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 
 	/**
-	 * Saves all attributes to the Node
-	 * 
-	 * @param n
-	 *            the database node
+	 * Save all the object's {@link EAttribute} using given {@link IConnection}
+	 * @param n the back-end {@link IConnection}
 	 */
-	public void saveAllAttributesTo(Node n);
-
+	public void saveAllAttributesTo(IConnection connection);
+	
 	/**
 	 * Loads attributes from Node.
 	 * 
 	 * @param n
 	 *            the database node
 	 */
-	public void loadAllAttributesFrom(Node n);
+	public void loadAllAttributesFrom(IConnection connection);
 
 	/**
-	 * Saves all references to the Node
-	 * 
-	 * @param n
-	 *            the database node
+	 * Save all the object's {@link EReference} using given {@link IConnection}
+	 * @param n the back-end {@link IConnection}
 	 */
-	public void saveAllReferencesTo(Node n);
-
+	public void saveAllReferencesTo(IConnection connection);
+	
 	/**
 	 * Loads references from Node.
 	 * 
 	 * @param n
 	 *            the database node
 	 */
-	public void loadAllReferencesFrom(Node n);
+	public void loadAllReferencesFrom(IConnection connection);
 
 	/**
 	 * returns the <b>ID</b> of the node that represents the element in the

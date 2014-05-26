@@ -50,13 +50,11 @@ public class Neo4emfResource extends ResourceImpl implements INeo4emfResource {
 	 * @param configuration
 	 */
 	public Neo4emfResource(NEConfiguration configuration) {
-
 		assert configuration != null : "Null configuration";
 		this.persistenceManager = new PersistenceManager(this, configuration);
-		// this.changeLog = IChangeLogFactory.eINSTANCE.createChangeLog();
-		this.changeLog = IChangeLogFactory.eINSTANCE.createChangeLog(this);
+		this.changeLog = IChangeLogFactory.eINSTANCE.createChangeLog(this, configuration);
 	}
-
+	
 	/**
 	 * @link {@link INeo4emfResource#fetchAttributes(EObject)}
 	 */
@@ -79,15 +77,12 @@ public class Neo4emfResource extends ResourceImpl implements INeo4emfResource {
 	 */
 	@Override
 	public void save() {
-		save(null);
+		this.persistenceManager.save();
 	}
-
-	/**
-	 * {@link INeo4emfResource#save(Map)}
-	 */
+	
 	@Override
-	public void save(Map<?, ?> options) {
-		this.persistenceManager.save(options);
+	public void dirtySave() {
+		this.persistenceManager.dirtySave();
 	}
 
 	/**
@@ -106,12 +101,12 @@ public class Neo4emfResource extends ResourceImpl implements INeo4emfResource {
 	 *            {@link Map}
 	 */
 	@Override
-	public void load(Map<?, ?> options) {
+	public void load() {
 
 		if (!isLoaded) {
 			try {
 				isLoading = true;
-				this.persistenceManager.load(options);
+				this.persistenceManager.load();
 				isLoaded = true;
 			} catch(Throwable e) {
 				e.printStackTrace();
