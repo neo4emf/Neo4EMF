@@ -1,6 +1,7 @@
 package fr.inria.atlanmod.neo4emf.drivers;
 
 import fr.inria.atlanmod.neo4emf.drivers.impl.PersistenceServiceFactory;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 /**
  * Copyright (c) 2013 Atlanmod INRIA LINA Mines Nantes All rights reserved. This
@@ -34,6 +35,6 @@ public interface IPersistenceServiceFactory {
 	 * @return {@link IPersistenceService}
 	 */
 
-	IPersistenceService createPersistenceService(NEConfiguration configuration);
+	IPersistenceService createPersistenceService(PersistenceConfiguration configuration);
 
 }

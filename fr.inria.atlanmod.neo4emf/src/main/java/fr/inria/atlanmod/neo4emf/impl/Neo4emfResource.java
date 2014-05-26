@@ -29,8 +29,8 @@ import fr.inria.atlanmod.neo4emf.change.impl.DeleteObject;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
 import fr.inria.atlanmod.neo4emf.change.impl.NewObject;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceManager;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
 import fr.inria.atlanmod.neo4emf.drivers.impl.PersistenceManager;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 public class Neo4emfResource extends ResourceImpl implements INeo4emfResource {
 
@@ -49,7 +49,7 @@ public class Neo4emfResource extends ResourceImpl implements INeo4emfResource {
 	 * 
 	 * @param configuration
 	 */
-	public Neo4emfResource(NEConfiguration configuration) {
+	public Neo4emfResource(PersistenceConfiguration configuration) {
 		assert configuration != null : "Null configuration";
 		this.persistenceManager = new PersistenceManager(this, configuration);
 		this.changeLog = IChangeLogFactory.eINSTANCE.createChangeLog(this, configuration);

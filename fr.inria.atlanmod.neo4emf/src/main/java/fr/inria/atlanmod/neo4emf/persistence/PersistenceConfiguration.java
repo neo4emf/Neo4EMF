@@ -10,7 +10,7 @@
  * Descritpion ! To come
  * @author Sunye
  */
-package fr.inria.atlanmod.neo4emf.drivers;
+package fr.inria.atlanmod.neo4emf.persistence;
 
 import java.io.File;
 import java.util.Map;
@@ -18,21 +18,25 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 
 import fr.inria.atlanmod.neo4emf.PersistentPackage;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConnectionFactory.PersistenceBackend;
 
-public class NEConfiguration {
+public class PersistenceConfiguration {
 	
 	private final PersistentPackage ePackage;
 	
 	private final URI uri;
+	
+	private final PersistenceBackend backend;
 	
 	private final Map<String,Object> options;
 	
 	private final File path;
 	
 	
-	public NEConfiguration(PersistentPackage ep, URI uri, Map<String,Object> map) {
+	public PersistenceConfiguration(PersistentPackage ep, URI uri, PersistenceBackend backend, Map<String,Object> map) {
 		this.ePackage = ep;
 		this.uri = uri;
+		this.backend = backend;
 		this.options = map;
 		
 		String name = uri.isHierarchical() ? uri.path() : uri.opaquePart();
@@ -53,5 +57,9 @@ public class NEConfiguration {
 	
 	public File path() {
 		return path;
+	}
+	
+	public PersistenceBackend backend() {
+		return backend;
 	}
 }

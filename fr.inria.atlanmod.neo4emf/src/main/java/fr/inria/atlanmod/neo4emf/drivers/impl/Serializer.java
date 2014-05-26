@@ -21,11 +21,13 @@ import org.eclipse.emf.ecore.EReference;
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.RelationshipMapping;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
-import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.drivers.ISerializer;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
-import fr.inria.atlanmod.neo4emf.drivers.NEConnectionFactory;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConnectionFactory;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConnectionFactory.PersistenceBackend;
+import fr.inria.atlanmod.neo4emf.persistence.neo4j.Neo4jConnectionFactory;
 
 public class Serializer implements ISerializer {
 
@@ -36,17 +38,17 @@ public class Serializer implements ISerializer {
 	
 	RelationshipMapping mapping;
 	
-	IConnection connection;
+	IPersistenceConnection connection;
 	
 	/**
 	 * TODO: Comment this
 	 */
 //	Map<String, Object> defaultOptions = new HashMap<String, Object>();
 	
-	public Serializer(PersistenceManager manager, NEConfiguration configuration) {
+	public Serializer(PersistenceManager manager, PersistenceConfiguration configuration) {
 		this.manager = manager;
 		this.mapping = configuration.ePackage().getRelationshipMapping();
-		this.connection = NEConnectionFactory.createNEConnection(configuration);
+		this.connection = PersistenceConnectionFactory.createConnection(configuration);
 	}
 
 	@Override

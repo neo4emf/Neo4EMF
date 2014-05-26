@@ -40,7 +40,7 @@ import fr.inria.atlanmod.neo4emf.change.IChangeLog;
 import fr.inria.atlanmod.neo4emf.change.impl.ChangeLogFactory;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
 import fr.inria.atlanmod.neo4emf.change.impl.SetAttribute;
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
 
 public class Neo4emfObject extends MinimalEObjectImpl implements INeo4emfObject {
 
@@ -451,22 +451,22 @@ public class Neo4emfObject extends MinimalEObjectImpl implements INeo4emfObject 
 	}
 
 	@Override
-	public void saveAllAttributesTo(IConnection connection) {
+	public void saveAllAttributesTo(IPersistenceConnection connection) {
 		throw new UnsupportedOperationException("Unsupported Method.");
 	}
 
 	@Override
-	public void loadAllAttributesFrom(IConnection connection) {
+	public void loadAllAttributesFrom(IPersistenceConnection connection) {
 		throw new UnsupportedOperationException("Unsupported Method.");
 	}
 
 	@Override
-	public void saveAllReferencesTo(IConnection connection) {
+	public void saveAllReferencesTo(IPersistenceConnection connection) {
 		throw new UnsupportedOperationException("Unsupported Method.");
 	}
 
 	@Override
-	public void loadAllReferencesFrom(IConnection connection) {
+	public void loadAllReferencesFrom(IPersistenceConnection connection) {
 		throw new UnsupportedOperationException("Unsupported Method.");
 
 	}

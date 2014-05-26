@@ -1,10 +1,10 @@
-package fr.inria.atlanmod.neo4emf.connectors;
+package fr.inria.atlanmod.neo4emf.persistence;
 
 import java.util.List;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 
-public interface IConnection {
+public interface IPersistenceConnection<T extends IPersistedEObject> {
 	
 	/**
 	 * Open the connection with the back-end
@@ -38,24 +38,16 @@ public interface IConnection {
 	 * @return the created {@link IPersistedEObject}
 	 */
 	public IPersistedEObject createPersistedEObject(INeo4emfObject eObject);
-	/**
-	 * @param eObject the {@link INeo4emfObject} to retrieve the persisted object from
-	 * @return the {@link IPersistedEObject} associated to the given {@link INeo4emfObject}
-	 */
-	public IPersistedEObject getPersistedEObject(INeo4emfObject eObject);
-	/**
-	 * Delete the given {@link INeo4emfObject} from the back-end
-	 * @param eObject the {@link INeo4emfObject} to delete
-	 */
-	public void deletePersistedEObject(INeo4emfObject eObject);
 	
-	public void persistAttribute(INeo4emfObject owner, String attributeName, Object attributeValue);
+	public void deletePersistedEObject(T persistedEObject);
+
+	public void persistAttribute(T owner, String attributeName, Object attributeValue);
 	
-	public void persistReference(INeo4emfObject from, INeo4emfObject to, String label);
+	public void persistReference(T from, T to, String label);
 	
-	public void removeReference(INeo4emfObject from, INeo4emfObject to, String label);
+	public void removeReference(T from, T to, String label);
 	
-	public Object getAttributeValue(INeo4emfObject owner, String attributeName);
+	public Object getAttributeValue(T owner, String attributeName);
 	
-	public List<IPersistedEObject> getReferencedObjects(INeo4emfObject owner, String label);
+	public List<IPersistedEObject> getReferencedObjects(T owner, String label);
 }

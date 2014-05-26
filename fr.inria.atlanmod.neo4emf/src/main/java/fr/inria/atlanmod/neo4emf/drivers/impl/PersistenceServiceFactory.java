@@ -32,12 +32,12 @@ import org.neo4j.kernel.impl.cache.WeakCacheProvider;
 
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceService;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceServiceFactory;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 public class PersistenceServiceFactory extends GraphDatabaseFactory implements IPersistenceServiceFactory {
 
 	@Override
-	public IPersistenceService createPersistenceService(NEConfiguration configuration) {
+	public IPersistenceService createPersistenceService(PersistenceConfiguration configuration) {
 
 		// the cache providers
 		ArrayList<CacheProvider> cacheList = new ArrayList<CacheProvider>();

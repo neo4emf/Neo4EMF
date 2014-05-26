@@ -23,19 +23,20 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.INeo4emfResourceFactory;
 import fr.inria.atlanmod.neo4emf.PersistentPackage;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 /**
  * 
  * @author sunye
  *
  */
-public class NESession {
+public class Neo4emfSession {
 	
 	private ResourceSet resourceSet = new ResourceSetImpl();
 	
 	private PersistentPackage ePackage;
 	
-	private NEConfiguration configuration;
+	private PersistenceConfiguration configuration;
 
     private INeo4emfResource resource;
 	
@@ -46,7 +47,7 @@ public class NESession {
 	 * 
 	 * @param ep The EPackage used to initialize the session. 
 	 */
-	public NESession(PersistentPackage ep) {
+	public Neo4emfSession(PersistentPackage ep) {
 		assert ep != null : "Null EPackage";
 		
 		ePackage = ep;
@@ -67,7 +68,7 @@ public class NESession {
 		if(options == null) {
 			options  = Collections.<String,Object>emptyMap();
 		}
-		configuration = new NEConfiguration(ePackage, uri, options);
+		configuration = new PersistenceConfiguration(ePackage, uri, options);
 		INeo4emfResourceFactory.eINSTANCE.setConfiguration(configuration);
 		resource = (INeo4emfResource) resourceSet.createResource(uri);
 		resource.setURI(uri);
@@ -75,7 +76,7 @@ public class NESession {
 	}
 	
 	/**
-	 * Closes the current section.
+	 * Closes the current session.
 	 */
 	public void close() {
 		  resource.shutdown();

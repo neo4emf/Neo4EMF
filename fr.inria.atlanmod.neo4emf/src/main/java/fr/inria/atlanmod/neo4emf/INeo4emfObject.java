@@ -17,15 +17,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
 
 public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 
 	/**
-	 * Save all the object's {@link EAttribute} using given {@link IConnection}
-	 * @param n the back-end {@link IConnection}
+	 * Save all the object's {@link EAttribute} using given {@link IPersistenceConnection}
+	 * @param n the back-end {@link IPersistenceConnection}
 	 */
-	public void saveAllAttributesTo(IConnection connection);
+	public void saveAllAttributesTo(IPersistenceConnection connection);
 	
 	/**
 	 * Loads attributes from Node.
@@ -33,13 +33,13 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * @param n
 	 *            the database node
 	 */
-	public void loadAllAttributesFrom(IConnection connection);
+	public void loadAllAttributesFrom(IPersistenceConnection connection);
 
 	/**
-	 * Save all the object's {@link EReference} using given {@link IConnection}
-	 * @param n the back-end {@link IConnection}
+	 * Save all the object's {@link EReference} using given {@link IPersistenceConnection}
+	 * @param n the back-end {@link IPersistenceConnection}
 	 */
-	public void saveAllReferencesTo(IConnection connection);
+	public void saveAllReferencesTo(IPersistenceConnection connection);
 	
 	/**
 	 * Loads references from Node.
@@ -47,7 +47,7 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * @param n
 	 *            the database node
 	 */
-	public void loadAllReferencesFrom(IConnection connection);
+	public void loadAllReferencesFrom(IPersistenceConnection connection);
 
 	/**
 	 * returns the <b>ID</b> of the node that represents the element in the

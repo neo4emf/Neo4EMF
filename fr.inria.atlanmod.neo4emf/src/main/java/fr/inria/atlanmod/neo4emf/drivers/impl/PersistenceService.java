@@ -36,24 +36,24 @@ import org.neo4j.kernel.Traversal;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.RelationshipMapping;
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
-import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
-import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceService;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfObject;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.neo4j.Neo4jConnection;
 
 public class PersistenceService implements IPersistenceService {
 	
 	/**
 	 * The database service connection.
 	 */
-	private final IConnection connection;
+	private final IPersistenceConnection connection;
 	
 	private final RelationshipMapping mapping;
 
-	protected PersistenceService(GraphDatabaseService service, NEConfiguration configuration) {
-		this.connection = new NeoConnection(service, configuration);
+	protected PersistenceService(GraphDatabaseService service, PersistenceConfiguration configuration) {
+		this.connection = new Neo4jConnection(service, configuration);
 		this.mapping = configuration.ePackage().getRelationshipMapping();
 		connection.open();
 	}

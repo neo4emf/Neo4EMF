@@ -6,7 +6,7 @@ import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.change.IChangeLog;
 import fr.inria.atlanmod.neo4emf.change.IChangeLogFactory;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 public class ChangeLogFactory implements IChangeLogFactory {
 	
@@ -21,7 +21,7 @@ public class ChangeLogFactory implements IChangeLogFactory {
 	}
 
 	@Override
-	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource, NEConfiguration configuration) {
+	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource, PersistenceConfiguration configuration) {
 		if(configuration.options().containsKey("cl_size")) {
 			return new ChangeLog(resource,(int)configuration.options().get("cl_size"));
 		}

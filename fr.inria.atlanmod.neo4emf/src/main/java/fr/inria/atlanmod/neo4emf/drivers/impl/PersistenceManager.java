@@ -28,23 +28,23 @@ import org.neo4j.graphdb.RelationshipType;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
-import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
-import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
 import fr.inria.atlanmod.neo4emf.drivers.ILoader;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceManager;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceServiceFactory;
 import fr.inria.atlanmod.neo4emf.drivers.IProxyManager;
 import fr.inria.atlanmod.neo4emf.drivers.ISerializer;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
-import fr.inria.atlanmod.neo4emf.drivers.NEConnectionFactory;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfObject;
 import fr.inria.atlanmod.neo4emf.impl.Neo4emfResource;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.neo4j.Neo4jConnectionFactory;
+import fr.inria.atlanmod.neo4emf.persistence.neo4j.Neo4jConnection;
 import fr.inria.atlanmod.neo4emf.resourceUtil.Neo4emfResourceUtil;
 
 public class PersistenceManager implements IPersistenceManager {
 
-	protected IConnection connection;
+	protected IPersistenceConnection connection;
 	/**
 	 * The loader and eObjects builder {@link Loader}
 	 */
@@ -75,7 +75,7 @@ public class PersistenceManager implements IPersistenceManager {
 
 	
 	public PersistenceManager(INeo4emfResource neo4emfResource,
-			NEConfiguration configuration) {
+			PersistenceConfiguration configuration) {
 		assert configuration != null : "Null configuration";
 		if(configuration.options().containsKey("max_operation_per_transaction")) {
 			maxOperationPerTransaction = (int)configuration.options().get("max_operation_per_transaction");
@@ -207,6 +207,7 @@ public class PersistenceManager implements IPersistenceManager {
 	}
 	
 	public void registerEObject(INeo4emfObject eObject, IPersistedEObject persistedObject) {
+		eObject.setPersistedEObject(persistedObject);
 		proxyManager.putToProxy(eObject);
 	}
 	

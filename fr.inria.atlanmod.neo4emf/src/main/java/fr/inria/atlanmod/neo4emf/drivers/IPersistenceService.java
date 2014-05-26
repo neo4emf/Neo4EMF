@@ -18,8 +18,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.neo4j.graphdb.RelationshipType;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
-import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.drivers.impl.NETransaction;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
 
 public interface IPersistenceService {
 	/**

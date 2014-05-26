@@ -10,7 +10,7 @@
  * Descritpion ! To come
  * @author Sunye
  */
-package fr.inria.atlanmod.neo4emf.connectors.impl;
+package fr.inria.atlanmod.neo4emf.persistence.neo4j;
 
 
 import java.util.ArrayList;
@@ -29,17 +29,17 @@ import org.neo4j.graphdb.index.IndexManager;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.PersistentPackage;
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
-import fr.inria.atlanmod.neo4emf.connectors.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.drivers.IPersistenceService;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
 import fr.inria.atlanmod.neo4emf.drivers.impl.NETransaction;
 import fr.inria.atlanmod.neo4emf.drivers.impl.Neo4JTransaction;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 /**
  * @author sunye
  */
-public class NeoConnection implements IConnection{
+public class Neo4jConnection implements IPersistenceConnection<Neo4jPersistedEObject> {
 
 	/**
 	 * Current state of the session
@@ -85,7 +85,7 @@ public class NeoConnection implements IConnection{
 	private int maxTxOperations = 50000;
 	private int currentTxOperationCount = 0;
 
-	public NeoConnection(GraphDatabaseService gdb, NEConfiguration configuration) {
+	public Neo4jConnection(GraphDatabaseService gdb, PersistenceConfiguration configuration) {
 		assert gdb != null : "Null Database Service";
 		assert configuration != null : "Null Configuration";
 
@@ -96,7 +96,7 @@ public class NeoConnection implements IConnection{
 	}
 
 	/**
-	 * @see IConnection#open()
+	 * @see IPersistenceConnection#open()
 	 */
 	@Override
 	public void open() {
@@ -118,7 +118,7 @@ public class NeoConnection implements IConnection{
 	}
 
 	/**
-	 * @see IConnection#close()
+	 * @see IPersistenceConnection#close()
 	 */
 	@Override
 	public void close() {
@@ -204,7 +204,7 @@ public class NeoConnection implements IConnection{
 	////////
 	
 	/**
-	 * @see IConnection#startSession()
+	 * @see IPersistenceConnection#startSession()
 	 */
 	@Override
 	public void startSession() {
@@ -213,7 +213,7 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#endSession()
+	 * @see IPersistenceConnection#endSession()
 	 */
 	@Override
 	public void endSession() {
@@ -223,7 +223,7 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#setDirtyState(boolean)
+	 * @see IPersistenceConnection#setDirtyState(boolean)
 	 */
 	@Override
 	public void setDirtyState(boolean isDirty) {
@@ -231,7 +231,7 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#commitDirtyEObjects()
+	 * @see IPersistenceConnection#commitDirtyEObjects()
 	 */
 	@Override
 	public void commitDirtyEObjects() {
@@ -257,7 +257,7 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#rollbackDirtyEObjects()
+	 * @see IPersistenceConnection#rollbackDirtyEObjects()
 	 */
 	@Override
 	public void rollbackDirtyEObjects() {
@@ -272,7 +272,7 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#createPersistedEObject(INeo4emfObject, boolean)
+	 * @see IPersistenceConnection#createPersistedEObject(INeo4emfObject, boolean)
 	 */
 	@Override
 	public IPersistedEObject createPersistedEObject(INeo4emfObject eObject) {
@@ -288,34 +288,16 @@ public class NeoConnection implements IConnection{
 		}catch(Exception e) {
 			newNode = null;
 		}
-		eObject.setNodeId(newNode.getId());
-		eObject.setSessionId(sessionId);
-		return new NeoPersistedEObject(newNode);
+		IPersistedEObject createdObject = new Neo4jPersistedEObject(newNode, eObject, this, sessionId);
+		return createdObject;
 	}
 	
 	/**
-	 * @see IConnection#getPersistedEObjectFrom(INeo4emfObject)
+	 * @see IPersistenceConnection#deletePeristentEObject(INeo4emfObject)
 	 */
 	@Override
-	public IPersistedEObject getPersistedEObject(INeo4emfObject eObject) {
-		Node eObjectNode = service.getNodeById(eObject.getNodeId());
-		Node attributeNode = null;
-		if(eObject.getAttributeNodeId() > -1) {
-			// The Node has an associated attribute node
-			attributeNode = service.getNodeById(eObject.getAttributeNodeId());
-		}
-		NeoPersistedEObject result = new NeoPersistedEObject(eObjectNode);
-		result.setAttributeNode(attributeNode);
-		return result;
-	}
-	
-	/**
-	 * @see IConnection#deletePeristentEObject(INeo4emfObject)
-	 */
-	@Override
-	public void deletePersistedEObject(INeo4emfObject eObject) {
-		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(eObject);
-		Node persistedNode = neoObject.getNode();
+	public void deletePersistedEObject(Neo4jPersistedEObject persistedEObject) {
+		Node persistedNode = persistedEObject.getNode();
 		if(isDirty) {
 			Relationship deleteRel = persistedNode.createRelationshipTo(persistedNode, IPersistenceService.DELETE);
 			currentTxOperationCount++;
@@ -345,20 +327,18 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#persistAttribute(IPersistedEObject, String, Object)
+	 * @see IPersistenceConnection#persistAttribute(IPersistedEObject, String, Object)
 	 */
 	@Override
-	public void persistAttribute(INeo4emfObject owner, String attributeName,
+	public void persistAttribute(Neo4jPersistedEObject owner, String attributeName,
 			Object attributeValue) {
-		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(owner);
-		Node persistedNode = neoObject.getNode();
+		Node persistedNode = owner.getNode();
 		if(isDirty) {
-			Node attributeNode = neoObject.getAttributeNode();
+			Node attributeNode = owner.getAttributeNode();
 			if(attributeNode == null) {
 				// There is no attribute node associated to the given object
 				attributeNode = createAttributeNode(persistedNode);
-				neoObject.setAttributeNode(attributeNode);
-				owner.setAttributeNodeId(attributeNode.getId());
+				owner.setAttributeNode(attributeNode);
 			}
 			attributeNode.setProperty(attributeName, attributeValue);
 			currentTxOperationCount++;
@@ -378,21 +358,21 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#persistReference(INeo4emfObject, INeo4emfObject, String)
+	 * @see IPersistenceConnection#persistReference(INeo4emfObject, INeo4emfObject, String)
 	 */
 	@Override
-	public void persistReference(INeo4emfObject from, INeo4emfObject to,
+	public void persistReference(Neo4jPersistedEObject from, Neo4jPersistedEObject to,
 			String label) {
 		if(isDirty) {
-			NeoPersistedEObject neoFrom = getOrCreateNeoPersistedEObject(from);
-			NeoPersistedEObject neoTo = getOrCreateNeoPersistedEObject(to);
-			if(neoFrom == null || neoTo == null) {
-				// At least one of the given object doesn't have a resource, there is
-				// no reason to persist the reference
-				return;
-			}
-			Node fromNode = neoFrom.getNode();
-			Node toNode = neoTo.getNode();
+		//	NeoPersistedEObject neoFrom = getOrCreateNeoPersistedEObject(from);
+		//	NeoPersistedEObject neoTo = getOrCreateNeoPersistedEObject(to);
+		//	if(neoFrom == null || neoTo == null) {
+		//		// At least one of the given object doesn't have a resource, there is
+		//		// no reason to persist the reference
+		//		return;
+		//	}
+			Node fromNode = from.getNode();
+			Node toNode = to.getNode();
 			/*
 			 * Remove the DELETE relationship that may have been generated. (This
 			 * happens when the EObject has been removed from its container).
@@ -446,10 +426,10 @@ public class NeoConnection implements IConnection{
 			return;
 		}
 		else {
-			NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
-			NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
-			Node fromNode = neoFrom.getNode();
-			Node toNode = neoTo.getNode();
+			//NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
+			//NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
+			Node fromNode = from.getNode();
+			Node toNode = to.getNode();
 			fromNode.createRelationshipTo(toNode, DynamicRelationshipType.withName(label));
 			currentTxOperationCount++;
 			if(currentTxOperationCount == maxTxOperations) {
@@ -460,16 +440,16 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#removeReference(INeo4emfObject, INeo4emfObject, String)
+	 * @see IPersistenceConnection#removeReference(INeo4emfObject, INeo4emfObject, String)
 	 */
 	@Override
-	public void removeReference(INeo4emfObject from, INeo4emfObject to,
+	public void removeReference(Neo4jPersistedEObject from, Neo4jPersistedEObject to,
 			String label) {
 		if(isDirty) {
-			NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
-			NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
-			Node fromNode = neoFrom.getNode();
-			Node toNode = neoTo.getNode();
+			//NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
+			//NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
+			Node fromNode = from.getNode();
+			Node toNode = to.getNode();
 			/*
 			 * If there is a ADD_LINK relationship with the same base
 			 * RelationshipType removes it. In that case it is not necessary to
@@ -504,10 +484,10 @@ public class NeoConnection implements IConnection{
 			return;
 		}
 		else {
-			NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
-			NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
-			Node fromNode = neoFrom.getNode();
-			Node toNode = neoTo.getNode();
+			//NeoPersistedEObject neoFrom = (NeoPersistedEObject)getPersistedEObject(from);
+			//NeoPersistedEObject neoTo = (NeoPersistedEObject)getPersistedEObject(to);
+			Node fromNode = from.getNode();
+			Node toNode = to.getNode();
 			Iterator<Relationship> it = fromNode.getRelationships(DynamicRelationshipType.withName(label)).iterator();
 			while(it.hasNext()) {
 				Relationship rel = it.next();
@@ -526,35 +506,37 @@ public class NeoConnection implements IConnection{
 	}
 	
 	/**
-	 * @see IConnection#getAttributeValue(INeo4emfObject, String)
+	 * @see IPersistenceConnection#getAttributeValue(INeo4emfObject, String)
 	 */
 	@Override
-	public Object getAttributeValue(INeo4emfObject owner, String attributeName) {
-		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(owner);
-		if(neoObject.getAttributeNode() != null) {
-			return neoObject.getAttributeNode().getProperty(attributeName);
+	public Object getAttributeValue(Neo4jPersistedEObject owner, String attributeName) {
+//		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(owner);
+		if(owner.getAttributeNode() != null) {
+			return owner.getAttributeNode().getProperty(attributeName);
 		}
-		return neoObject.getNode().getProperty(attributeName);
+		return owner.getNode().getProperty(attributeName);
 	}
 	
 	@Override
-	public List<IPersistedEObject> getReferencedObjects(INeo4emfObject owner,
+	public List<IPersistedEObject> getReferencedObjects(Neo4jPersistedEObject owner,
 			String label) {
-		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(owner);
+//		NeoPersistedEObject neoObject = (NeoPersistedEObject)getPersistedEObject(owner);
 		List<IPersistedEObject> referencedObjects = new ArrayList<IPersistedEObject>();
-		Node neoNode = neoObject.getNode();
+		Node neoNode = owner.getNode();
 		
 		Iterator<Relationship> baseRelIt = neoNode.getRelationships(Direction.OUTGOING,DynamicRelationshipType.withName(label)).iterator();
 		while(baseRelIt.hasNext()) {
 			Relationship rel = baseRelIt.next();
-			referencedObjects.add(new NeoPersistedEObject(rel.getEndNode()));
+			// FIXME check that (null EObject and sessionId)
+			referencedObjects.add(new Neo4jPersistedEObject(rel.getEndNode(),null,this,sessionId));
 		}
 		
 		Iterator<Relationship> addLinkRelIt = neoNode.getRelationships(Direction.OUTGOING, IPersistenceService.ADD_LINK).iterator();
 		while(addLinkRelIt.hasNext()) {
 			Relationship rel = addLinkRelIt.next();
 			if(rel.getProperty("gen_rel").equals(label)) {
-				referencedObjects.add(new NeoPersistedEObject(rel.getEndNode()));
+				// FIXME check that (null EObject and sessionId)
+				referencedObjects.add(new Neo4jPersistedEObject(rel.getEndNode(),null,this,sessionId));
 			}
 		}
 		
@@ -563,7 +545,8 @@ public class NeoConnection implements IConnection{
 			Relationship rel = removeLinkIt.next();
 			if(rel.getProperty("gen_rel").equals(label)) {
 				// FIXME no equal method (maybe a list of ids ? and delete PersistedEObject)
-				referencedObjects.remove(new NeoPersistedEObject(rel.getEndNode()));
+				// FIXME check that (null EObject and sessionId)
+				referencedObjects.remove(new Neo4jPersistedEObject(rel.getEndNode(),null,this,sessionId));
 			}
 		}
 		return referencedObjects;
@@ -663,21 +646,22 @@ public class NeoConnection implements IConnection{
 		return attributeNode;
 	}
 	
-	private NeoPersistedEObject getOrCreateNeoPersistedEObject(INeo4emfObject eObject) {
+	// FIXME, what should we do with that ?
+	private Neo4jPersistedEObject getOrCreateNeoPersistedEObject(INeo4emfObject eObject) {
 		if(eObject.getNodeId() == -1) {
 			if(eObject.eResource() != null) {
 				/*
 				 * Happen when a user first add a non containment link then
 				 * add the referenced object to its container.
 				 */
-				return (NeoPersistedEObject)this.createPersistedEObject(eObject);
+				return (Neo4jPersistedEObject)this.createPersistedEObject(eObject);
 			}
 			// The eObject is not contained in a resource, there is no reason to
 			// create a node for it
 			return null;
 		}
 		else {
-			return (NeoPersistedEObject)getPersistedEObject(eObject);
+			return (Neo4jPersistedEObject)getPersistedEObject(eObject);
 		}
 	}
 	

@@ -7,13 +7,13 @@ import fr.inria.atlanmod.neo4emf.INeo4emfObject;
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.change.impl.ChangeLogFactory;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 public interface IChangeLogFactory {
 	
 	IChangeLogFactory eINSTANCE = ChangeLogFactory.init();
 	
-	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource, NEConfiguration configuration);
+	public IChangeLog<Entry> createChangeLog(INeo4emfResource resource, PersistenceConfiguration configuration);
 	
 	/**
 	 * Return an Unidirectional or Bidirectional AddLink entry

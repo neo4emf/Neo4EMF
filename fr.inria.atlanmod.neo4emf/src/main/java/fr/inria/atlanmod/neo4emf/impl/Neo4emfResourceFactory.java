@@ -18,12 +18,12 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 
 import fr.inria.atlanmod.neo4emf.INeo4emfResource;
 import fr.inria.atlanmod.neo4emf.INeo4emfResourceFactory;
-import fr.inria.atlanmod.neo4emf.drivers.NEConfiguration;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
 public class Neo4emfResourceFactory extends ResourceFactoryImpl implements
 		INeo4emfResourceFactory {
 	
-	private NEConfiguration configuration;
+	private PersistenceConfiguration configuration;
 
 	//public Neo4emfResourceFactory(NEConfiguration nec) {
 	//	configuration = nec;
@@ -66,7 +66,7 @@ public class Neo4emfResourceFactory extends ResourceFactoryImpl implements
 	}
 
 	@Override
-	public void setConfiguration(NEConfiguration nec) {
+	public void setConfiguration(PersistenceConfiguration nec) {
 		configuration = nec;
 	}
 

@@ -10,7 +10,7 @@
  * Descritpion ! To come
  * @author Sunye
  */
-package fr.inria.atlanmod.neo4emf.drivers;
+package fr.inria.atlanmod.neo4emf.persistence.neo4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,13 @@ import org.neo4j.kernel.extension.KernelExtensionFactory;
 import org.neo4j.kernel.impl.cache.CacheProvider;
 import org.neo4j.kernel.impl.cache.WeakCacheProvider;
 
-import fr.inria.atlanmod.neo4emf.connectors.IConnection;
-import fr.inria.atlanmod.neo4emf.connectors.impl.NeoConnection;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
+import fr.inria.atlanmod.neo4emf.persistence.PersistenceConfiguration;
 
-public class NEConnectionFactory {
+public class Neo4jConnectionFactory {
 	
-	public static IConnection createNEConnection(NEConfiguration configuration) {
+	public static IPersistenceConnection createNeo4jConnection(PersistenceConfiguration configuration) {
 		// the cache providers
 		ArrayList<CacheProvider> cacheList = new ArrayList<CacheProvider>();
 		System.out.println("Creating db configuration");
@@ -54,7 +55,7 @@ public class NEConnectionFactory {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		IConnection connection = new NeoConnection(db, configuration);
+		IPersistenceConnection connection = new Neo4jConnection(db, configuration);
 		return connection;
 	}
 
