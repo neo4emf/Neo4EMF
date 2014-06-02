@@ -17,10 +17,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
 
 public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
-
+	
+	public void attachPersistedEObject(IPersistedEObject obj);
+	
+	public IPersistedEObject persistedEObject();
+	
 	/**
 	 * Save all the object's {@link EAttribute} using given {@link IPersistenceConnection}
 	 * @param n the back-end {@link IPersistenceConnection}
@@ -55,7 +60,7 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * 
 	 * @return ID {@link long }
 	 */
-	public long getNodeId();
+	//public long getNodeId();
 
 	/**
 	 * returns the <b>ID</b> of the node that represents the temporary
@@ -64,7 +69,7 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * 
 	 * @return AttributeNodeID {@link long}
 	 */
-	public long getAttributeNodeId();
+	//public long getAttributeNodeId();
 
 	/**
 	 * set the <b>ID</b> of the eObject once created from the backend node
@@ -72,7 +77,7 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * @param id
 	 *            {@link long}
 	 */
-	void setNodeId(long id);
+	//void setNodeId(long id);
 
 	/**
 	 * set the <b>attribute ID</b> of the eObject once created from the
@@ -81,19 +86,19 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 	 * @param id
 	 *            {@link long}
 	 */
-	void setAttributeNodeId(long id);
+	//void setAttributeNodeId(long id);
 
 	/**
 	 * @return ID {@link int}
 	 */
-	public int getPartitionId();
+	//public int getPartitionId();
 
 	/**
 	 * set the partition Id
 	 * 
 	 * @param id
 	 */
-	public void setPartitionId(int id);
+	//public void setPartitionId(int id);
 
 	void setProxy(boolean isProxy);
 
@@ -119,8 +124,8 @@ public interface INeo4emfObject extends EObject, Comparable<INeo4emfObject> {
 
 	boolean isLoaded();
 	
-	int getSessionId();
+	//int getSessionId();
 	
-	void setSessionId(int sessionId);
+	//void setSessionId(int sessionId);
 	
 }

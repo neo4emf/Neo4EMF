@@ -108,12 +108,10 @@ public class Serializer implements ISerializer {
 	}
 
 	public void createNewObject(INeo4emfObject eObject) {
-		IPersistedEObject persistedEObject = null;
-		if (eObject.getNodeId() == -1) {
+		IPersistedEObject persistedEObject = eObject.persistedEObject();
+		if (persistedEObject == null) {
 			persistedEObject = this.connection.createPersistedEObject(eObject);
 			manager.registerEObject(eObject,persistedEObject);
-		} else {
-			persistedEObject = this.connection.getPersistedEObject(eObject);
 		}
 		eObject.saveAllAttributesTo(connection);
 		eObject.saveAllReferencesTo(connection);

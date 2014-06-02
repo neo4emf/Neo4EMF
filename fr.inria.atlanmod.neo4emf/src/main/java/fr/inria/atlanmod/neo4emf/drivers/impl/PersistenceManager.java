@@ -207,7 +207,7 @@ public class PersistenceManager implements IPersistenceManager {
 	}
 	
 	public void registerEObject(INeo4emfObject eObject, IPersistedEObject persistedObject) {
-		eObject.setPersistedEObject(persistedObject);
+		eObject.attachPersistedEObject(persistedObject);
 		proxyManager.putToProxy(eObject);
 	}
 	

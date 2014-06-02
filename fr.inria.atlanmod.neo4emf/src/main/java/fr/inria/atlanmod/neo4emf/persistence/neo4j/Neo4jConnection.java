@@ -647,23 +647,23 @@ public class Neo4jConnection implements IPersistenceConnection<Neo4jPersistedEOb
 	}
 	
 	// FIXME, what should we do with that ?
-	private Neo4jPersistedEObject getOrCreateNeoPersistedEObject(INeo4emfObject eObject) {
-		if(eObject.getNodeId() == -1) {
-			if(eObject.eResource() != null) {
-				/*
-				 * Happen when a user first add a non containment link then
-				 * add the referenced object to its container.
-				 */
-				return (Neo4jPersistedEObject)this.createPersistedEObject(eObject);
-			}
-			// The eObject is not contained in a resource, there is no reason to
-			// create a node for it
-			return null;
-		}
-		else {
-			return (Neo4jPersistedEObject)getPersistedEObject(eObject);
-		}
-	}
+//	private Neo4jPersistedEObject getOrCreateNeoPersistedEObject(INeo4emfObject eObject) {
+//		if(eObject.getNodeId() == -1) {
+//			if(eObject.eResource() != null) {
+//				/*
+//				 * Happen when a user first add a non containment link then
+//				 * add the referenced object to its container.
+//				 */
+//				return (Neo4jPersistedEObject)this.createPersistedEObject(eObject);
+//			}
+//			// The eObject is not contained in a resource, there is no reason to
+//			// create a node for it
+//			return null;
+//		}
+//		else {
+//			return (Neo4jPersistedEObject)getPersistedEObject(eObject);
+//		}
+//	}
 	
 	/**
 	 * Persist permanently a dirty SET_ATTRIBUTE relationship  

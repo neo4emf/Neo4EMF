@@ -40,6 +40,7 @@ import fr.inria.atlanmod.neo4emf.change.IChangeLog;
 import fr.inria.atlanmod.neo4emf.change.impl.ChangeLogFactory;
 import fr.inria.atlanmod.neo4emf.change.impl.Entry;
 import fr.inria.atlanmod.neo4emf.change.impl.SetAttribute;
+import fr.inria.atlanmod.neo4emf.persistence.IPersistedEObject;
 import fr.inria.atlanmod.neo4emf.persistence.IPersistenceConnection;
 
 public class Neo4emfObject extends MinimalEObjectImpl implements INeo4emfObject {
@@ -47,21 +48,23 @@ public class Neo4emfObject extends MinimalEObjectImpl implements INeo4emfObject 
 	protected volatile int loadingOnDemand = 0;
 
 	protected volatile int memoryLock = 0;
+	
+	private IPersistedEObject persistedEObject = null;
 
 	/**
 	 * eObject ID
 	 */
-	private long id = -1;
+	//private long id = -1;
 	/**
 	 * Partition ID
 	 */
-	private int partition = -1;
+	//private int partition = -1;
 	/**
 	 * eObject temporary attribute node ID
 	 */
-	protected long attributeId = -1;
+	//protected long attributeId = -1;
 	
-	private int sessionId = -1;
+	//private int sessionId = -1;
 	/**
 	 * isProxy flag
 	 */
@@ -76,38 +79,38 @@ public class Neo4emfObject extends MinimalEObjectImpl implements INeo4emfObject 
 	/**
 	 * @see INeo4emfObject#getNodeId()
 	 */
-	@Override
-	public long getNodeId() {
-		return this.id;
-	}
+//	@Override
+//	public long getNodeId() {
+//		return this.id;
+//	}
 
-	@Override
-	public long getAttributeNodeId() {
-		return this.attributeId;
-	}
+//	@Override
+//	public long getAttributeNodeId() {
+//		return this.attributeId;
+//	}
 
-	/**
-	 * @see INeo4emfObject#setNodeId()
-	 */
-	@Override
-	public void setNodeId(final long nodeId) {
-		this.id = nodeId;
-	}
+//	/**
+//	 * @see INeo4emfObject#setNodeId()
+//	 */
+//	@Override
+//	public void setNodeId(final long nodeId) {
+//		this.id = nodeId;
+//	}
 
-	@Override
-	public void setAttributeNodeId(final long nodeId) {
-		this.attributeId = nodeId;
-	}
+//	@Override
+//	public void setAttributeNodeId(final long nodeId) {
+//		this.attributeId = nodeId;
+//	}
+//
+//	@Override
+//	public int getPartitionId() {
+//		return partition;
+//	}
 
-	@Override
-	public int getPartitionId() {
-		return partition;
-	}
-
-	@Override
-	public void setPartitionId(final int partId) {
-		this.partition = partId;
-	}
+//	@Override
+//	public void setPartitionId(final int partId) {
+//		this.partition = partId;
+//	}
 
 	/**
 	 * Constructor

@@ -24,7 +24,7 @@ public class Neo4jPersistedEObject implements IPersistedEObject {
 	/**
 	 * The connection that handle the transactions
 	 */
-	private IPersistenceConnection connection = null;
+	private Neo4jConnection connection = null;
 	/**
 	 * The identifier of the session the {@link IPersistedEObject} has been created in
 	 */
@@ -37,7 +37,7 @@ public class Neo4jPersistedEObject implements IPersistedEObject {
 	 * @param connection the {@link IPersistenceConnection} that handle the transactions on the database
 	 * @param sessionId the identifier of the session the {@link IPersistedEObject} has been created in
 	 */
-	Neo4jPersistedEObject(Node node, INeo4emfObject eObject, IPersistenceConnection connection, int sessionId) {
+	Neo4jPersistedEObject(Node node, INeo4emfObject eObject, Neo4jConnection connection, int sessionId) {
 		assert node != null : "Cannot construct a NeoPersistedEObject from a null Node";
 		assert eObject != null : "Cannot construct a NeoPersistedEObject from a null EObject";
 		assert connection != null : "Cannot construct a NeoPersistedEObject with a null IPersistenceConnection";
@@ -78,7 +78,7 @@ public class Neo4jPersistedEObject implements IPersistedEObject {
 	@Override
 	public void addReference(String name, IPersistedEObject value) {
 		assert name != null && !name.isEmpty() : "Cannot save a reference with an empty label";
-		connection.persistReference(this, value, name);
+		connection.persistReference(this, (Neo4jPersistedEObject)value, name);
 	}
 	
 	/**
@@ -87,6 +87,6 @@ public class Neo4jPersistedEObject implements IPersistedEObject {
 	@Override
 	public void removeReference(String name, IPersistedEObject value) {
 		assert name != null && !name.isEmpty() : "Cannot remove a reference with an empty label";
-		connection.removeReference(this, value, name);
+		connection.removeReference(this, (Neo4jPersistedEObject)value, name);
 	}
 }
