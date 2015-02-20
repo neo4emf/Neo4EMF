@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/fr.inria.atlanmod.neo4emf.feature_0.2.1.201502201724.jar" id="fr.inria.atlanmod.neo4emf.feature" version="0.2.1.201502201724">
+   <feature url="features/fr.inria.atlanmod.neo4emf.feature_0.2.1.201502201735.jar" id="fr.inria.atlanmod.neo4emf.feature" version="0.2.1.201502201735">
       <category name="Neo4EMF"/>
    </feature>
-   <feature url="features/fr.inria.atlanmod.neo4emf.neo4jinstaller.feature_0.2.1.201502201724.jar" id="fr.inria.atlanmod.neo4emf.neo4jinstaller.feature" version="0.2.1.201502201724">
+   <feature url="features/fr.inria.atlanmod.neo4emf.neo4jinstaller.feature_0.2.1.201502201735.jar" id="fr.inria.atlanmod.neo4emf.neo4jinstaller.feature" version="0.2.1.201502201735">
       <category name="Neo4j Installer"/>
    </feature>
-   <feature url="features/fr.inria.atlanmod.neo4emf.neo4jresolver.feature_0.2.1.201502201724.jar" id="fr.inria.atlanmod.neo4emf.neo4jresolver.feature" version="0.2.1.201502201724">
+   <feature url="features/fr.inria.atlanmod.neo4emf.neo4jresolver.feature_0.2.1.201502201735.jar" id="fr.inria.atlanmod.neo4emf.neo4jresolver.feature" version="0.2.1.201502201735">
       <category name="Neo4j Installer"/>
    </feature>
    <category-def name="Neo4EMF" label="Neo4EMF core"/>
