@@ -32,10 +32,10 @@
         <ul class="nav nav-pills pull-right" ">
 		  
           <li class="active"><a href="#">Home</a></li>
-          <li><a href="wiki.html">Wiki</a></li>
+          <li><a href="https://github.com/atlanmod/NeoEMF/wiki">Wiki</a></li>
           <li><a href="license.html">License</a></li>
           <li><a href="contact.html">Contact</a></li>
-		  <li><a href="events.html">Publications</a></li>
+          <li><a href="events.html">Publications</a></li>
         </ul>
       </div>
 
@@ -50,17 +50,19 @@
 		<div class="col-lg-6">
 			
 			
-			<p>	<b>Neo4EMF</b> provides a No-SQL database persistence framework based on <b>Neo4j</b>, 
-				which is a transactional property-graph database that proved a <b>remarkable running speed</b> for connected data operations compared to relational databases. 
+			<p>
+			NeoEMF is an AtlanMod research team project that aims at handling large EMF models 
+			in an efficient and scalable way. It is based on our work on Neo4EMF, a scalable 
+			and graph based backend for persisting EMF models. NeoEMF is a multi-backend framework 
+			developped to allow an easy integration of custom backends depending on user needs. 
 			</p>
-			<p>What makes <b>Neo4EMF</b> different is the use of a sophisticated unloading approach apart from simple Soft/Weak references </p>
 		</div>
 		<div class="col-lg-6" align = "center" vspace = "50">
 		<p ></p>
 
-		<p vspace="50" style = "margin-top : 30px"> <a class="btn btn-lg btn-success" href="https://github.com/neo4emf/Neo4EMF" role="button" ><img src = "img/github.png" style = "margin-right : 5px; margin-left = -5px">Github</a>
-			<a class="btn btn-lg btn-success" href="https://github.com/neo4emf/Neo4EMF/archive/v0.1.0.zip" role="button" style =  "margin-left: 10px">Download zip</a>
-			<a class="btn btn-lg btn-success" href="./updates" role="button" style =  "margin-left: 10px" >Update site</a>
+		<p vspace="50" style = "margin-top : 30px"> <a class="btn btn-lg btn-success" href="https://github.com/atlanmod/NeoEMF" role="button" ><img src = "img/github.png" style = "margin-right : 5px; margin-left = -5px">Github</a>
+			<a class="btn btn-lg btn-success" href="https://github.com/atlanmod/NeoEMF/archive/v0.1.0.zip" role="button" style =  "margin-left: 10px">Download zip</a>
+			<a class="btn btn-lg btn-success" href="http://atlanmod.github.io/NeoEMF/" role="button" style =  "margin-left: 10px" >Update site</a>
 		</p>
 		</div>
 	  </div>	  
@@ -70,7 +72,7 @@
 			<img src = "img/java.png">
 			<h4>Java code generation </h4>
 		  
-			<p>Given any ecore model, Neo4EMF provides you with an adapted java code generation for a refined on-demand loading </p>
+			<p>Given any ecore model, NeoEMF provides you with an adapted generic java code generation usable with several backends </p>
 
         
         </div>
@@ -78,14 +80,14 @@
 			<img src = "img/on-demand.png">
 			<h4>On-demand loading </h4>
 		  
-			<p>Light-weight loading of massive queries by separating EObjects and their data fields. They are only instantiated if accessed</p>
+			<p>Light-weight loading of massive queries by only instantiating accessed EObjects</p>
 
         </div>
 		
         <div class="col-lg-4">
 			<img src = "img/boost.jpg">
-          <h4>Fast querying </h4>
-          <p> Neo4EMF provides a No-SQL database persistence framework based on Neo4j, which has proved a remarkable running speed </p>
+          <h4>Multiple Backends</h4>
+          <p>NeoEMF provides two backend implementations to fit your needs: a Graph backend (Blueprints/Neo4j) and a Map (MapDB) one.</p>
 
       </div>
 		</div>
